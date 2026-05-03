@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuralOps</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">NEURALOPS</div>
+
+
+
+
+        <nav>
+            <a href="#">Inicio</a>
+            <a href="#">Servicios</a>
+            <a href="#">Soluciones</a>
+            <a href="#">Industrias</a>
+            <a href="#">Nosotros</a>
+            <a href="#">Contacto</a>
+        </nav>
+
+        <button class="cta">Agendar reunión</button>
+    </header>
+
+    <section class="hero">
+
+        <div class="hero-text">
+            <div class="tag">AUTOMATIZACIÓN • IA • CIBERSEGURIDAD</div>
+
+            <h1>
+                ARQUITECTURA INTELIGENTE <br>
+                <span>PARA OPERACIONES QUE ESCALAN.</span>
+            </h1>
+
+            <p>
+                Diseñamos sistemas y automatizaciones con IA que optimizan procesos,
+                reducen costos y potencian el crecimiento de tu organización.
+            </p>
+
+            <div class="hero-buttons">
+                <button class="btn-primary">Agendar una reunión</button>
+                <div class="btn-secondary">▶ Ver cómo funciona</div>
+            </div>
+        </div>
+
+        <div class="hero-img">
+            <img src="./src/assets/cerebro.jpg" alt="">
+        </div>
+
+    </section>
+
+    <div class="logos"> 
+        <div>GRUPO ISAMER</div>
+        <div>FIBROMAGIAPLUS</div>
+        <div>ILEVENT</div>
+        <div>BIG BOSS IMPORTACIONES</div>
+        <div>ORWELL</div>
+        <div>NEURALOPS</div>
+    </div>
+
+    <section class="section">
+
+        <div class="section-title">TECNOLOGÍA QUE GENERA RESULTADOS</div>
+        <p>Combinamos automatización, inteligencia artificial y ciberseguridad.</p>
+
+        <div class="grid">
+
+            <div class="card">
+                <h3>Automatización Inteligente</h3>
+                <p>Procesos automatizados e integración total.</p>
+            </div>
+
+            <div class="card">
+                <h3>Inteligencia Artificial</h3>
+                <p>Predicción y decisiones basadas en datos.</p>
+            </div>
+
+            <div class="card">
+                <h3>Ciberseguridad</h3>
+                <p>Protección de infraestructura crítica.</p>
+            </div>
+
+            <div class="card">
+                <h3>Escalabilidad</h3>
+                <p>Sistemas que crecen con tu negocio.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="section">
+
+        <div class="metrics">
+
+            <div class="metric">
+                <strong>+70%</strong>
+                <p>Reducción tareas manuales</p>
+            </div>
+
+            <div class="metric">
+                <strong>-60%</strong>
+                <p>Disminución tiempos</p>
+            </div>
+
+            <div class="metric">
+                <strong>+40%</strong>
+                <p>Ahorro costos</p>
+            </div>
+
+            <div class="metric">
+                <strong>+100%</strong>
+                <p>Escalabilidad</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="section">
+
+        <h2>Diagnóstico Estratégico</h2>
+        <p>Cupos limitados.</p>
+
+        <form id="leadForm">
+            <input type="text" id="nombre" placeholder="Nombre" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <button class="btn-primary">Solicitar acceso</button>
+        </form>
+
+    </section>
+
+    <div class="footer">
+        © 2026 NeuralOps | <a href="#">Política de privacidad</a> | <a href="#">Términos de servicio</a>
+    </div>
+
+
+
+    <script>
+        const form = document.getElementById("leadForm");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const nombre = document.getElementById("nombre").value;
+            const email = document.getElementById("email").value;
+
+            try {
+                const res = await fetch("http://localhost:4000/api/lead", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ nombre, email })
+                });
+
+                const data = await res.json();
+
+                alert("Lead enviado 🚀");
+
+                form.reset();
+
+            } catch (error) {
+                alert("Error al enviar");
+            }
+        });
+
+    </script>
+
+    <!-- 🔐 ACCESO ADMIN OCULTO -->
+    <div id="adminTrigger" style="
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 9999;
+"></div>
+
+    <script>
+        let clicks = 0;
+        let timer;
+
+        const trigger = document.getElementById("adminTrigger");
+
+        trigger.addEventListener("click", () => {
+            clicks++;
+
+            clearTimeout(timer);
+
+            timer = setTimeout(() => {
+                clicks = 0;
+            }, 1500);
+
+            if (clicks >= 5) {
+                window.location.href = "admin.html";
+            }
+        });
+    </script>
+
+
+</body>
+
+</html>
