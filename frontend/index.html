@@ -19,17 +19,13 @@
 
 
 
-
         <nav>
-            <a href="#">Inicio</a>
-            <a href="#">Servicios</a>
-            <a href="#">Soluciones</a>
-            <a href="#">Industrias</a>
-            <a href="#">Nosotros</a>
-            <a href="#">Contacto</a>
+            <a href="index.html">Inicio</a>
+            <a href="servicios.html">Servicios</a>
+            <a href="soluciones.html">Soluciones</a>
+            <a href="nosotros.html">Nosotros</a>
         </nav>
 
-        <button class="cta">Agendar reunión</button>
     </header>
 
     <section class="hero">
@@ -49,7 +45,6 @@
 
             <div class="hero-buttons">
                 <button class="btn-primary">Agendar una reunión</button>
-                <div class="btn-secondary">▶ Ver cómo funciona</div>
             </div>
         </div>
 
@@ -59,14 +54,39 @@
 
     </section>
 
-    <div class="logos"> 
-        <div>GRUPO ISAMER</div>
-        <div>FIBROMAGIAPLUS</div>
-        <div>ILEVENT</div>
-        <div>BIG BOSS IMPORTACIONES</div>
-        <div>ORWELL</div>
-        <div>NEURALOPS</div>
-    </div>
+    <section class="partners-section">
+
+        <h3 class="partners-title">EMPRESAS AMIGAS</h3>
+
+        <div class="logos">
+
+            <a href="https://grupoisamer.com" target="_blank" class="partner-btn">
+                GRUPO ISAMER
+            </a>
+
+            <a href="https://fibromagiaplus.vercel.app/" target="_blank" class="partner-btn">
+                FIBROMAGIAPLUS
+            </a>
+
+            <a href="https://ilevent.com" target="_blank" class="partner-btn">
+                ILEVENT
+            </a>
+
+            <a href="https://bigbossimportaciones.com" target="_blank" class="partner-btn">
+                BIG BOSS IMPORTACIONES
+            </a>
+
+            <a href="https://orwell.com" target="_blank" class="partner-btn">
+                ORWELL
+            </a>
+
+            <a href="https://neuralops.com" target="_blank" class="partner-btn">
+                NEURALOPS
+            </a>
+
+        </div>
+
+    </section>
 
     <section class="section">
 
@@ -135,44 +155,62 @@
         <form id="leadForm">
             <input type="text" id="nombre" placeholder="Nombre" required>
             <input type="email" id="email" placeholder="Email" required>
-            <button class="btn-primary">Solicitar acceso</button>
+            <textarea id="mensaje" placeholder="Contanos tu proyecto" required></textarea>
+            <button class="btn-primary">Enviar Consulta</button>
         </form>
 
     </section>
 
     <div class="footer">
-        © 2026 NeuralOps | <a href="#">Política de privacidad</a> | <a href="#">Términos de servicio</a>
+        © 2026 NeuralOps |
+        <a href="privacidad.html">Política de privacidad</a> |
+        <a href="terminos.html">Términos y condiciones</a>
     </div>
 
 
 
     <script>
+
         const form = document.getElementById("leadForm");
 
         form.addEventListener("submit", async (e) => {
+
             e.preventDefault();
 
             const nombre = document.getElementById("nombre").value;
             const email = document.getElementById("email").value;
+            const mensaje = document.getElementById("mensaje").value;
 
             try {
+
                 const res = await fetch("http://localhost:4000/api/lead", {
+
                     method: "POST",
+
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({ nombre, email })
+
+                    body: JSON.stringify({
+                        nombre,
+                        email,
+                        mensaje
+                    })
+
                 });
 
                 const data = await res.json();
 
-                alert("Lead enviado 🚀");
+                alert("Consulta enviada 🚀");
 
                 form.reset();
 
             } catch (error) {
+
                 alert("Error al enviar");
+
             }
+
         });
 
     </script>

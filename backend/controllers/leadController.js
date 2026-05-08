@@ -5,13 +5,13 @@ import nodemailer from "nodemailer";
 // 📩 CREAR LEAD
 export const crearLead = async (req, res) => {
   try {
-    const { nombre, email } = req.body;
+    const { nombre, email, mensaje } = req.body;
 
-    if (!nombre || !email) {
+    if (!nombre || !email || !mensaje) {
       return res.status(400).json({ error: "Datos incompletos" });
     }
 
-    const nuevoLead = new Lead({ nombre, email });
+    const nuevoLead = new Lead({ nombre, email, mensaje });
     await nuevoLead.save();
 
     // 🔥 CREAR TRANSPORTER ACÁ 

@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const leadSchema = new mongoose.Schema({
   nombre: String,
   email: String,
+  mensaje: String,
   estado: {
     type: String,
     enum: ["nuevo", "contactado", "cliente"],
