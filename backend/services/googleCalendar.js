@@ -1,12 +1,8 @@
 import { google } from "googleapis";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import dayjs from "dayjs";
 
 const auth = new google.auth.GoogleAuth({
-    keyFile: path.join(__dirname, "../config/google.json"),
+    keyFile: "./google-calendar.json",
     scopes: ["https://www.googleapis.com/auth/calendar"]
 });
 
@@ -15,4 +11,89 @@ const calendar = google.calendar({
     auth
 });
 
-export default calendar;
+const calendarId = "primary";
+
+
+// 🔎 OBTENER HORARIOS LIBRES
+export const obtenerHorariosDisponibles = async (fecha) => {
+
+    const inicio = dayjs(fecha).hour(9).minute(0).toISOString();
+    const fin = dayjs(fecha).hour(18).minute(0).toISOString();
+
+    const eventos = await calendar.events.list({
+        calendarId,
+        timeMin: inicio,
+        timeMax: fin,
+        singleEvents: true,
+        orderBy: "startTime"
+    });
+
+    const ocupados = eventos.data.items.map(evento => ({
+        inicio: dayjs(evento.start.dateTime),
+        fin: dayjs(evento.end.dateTime)
+    }));
+
+    const horarios = [];
+
+    for (let h = 9; h < 18; h++) {
+
+        const horaInicio = dayjs(fecha).hour(h).minute(0);
+        const horaFin = horaInicio.add(1, "hour");
+
+        const ocupado = ocupados.some(o =>
+            horaInicio.isBefore(o.fin) &&
+            horaFin.isAfter(o.inicio)
+        );
+
+        if (!ocupado) {
+            horarios.push(horaInicio.format("HH:mm"));
+        }
+    }
+
+    return horarios;
+};
+
+
+// 📅 CREAR EVENTO
+export const crearEvento = async ({
+    nombre,
+    email,
+    fecha,
+    hora
+}) => {
+
+    const inicio = dayjs(`${fecha} ${hora}`);
+    const fin = inicio.add(1, "hour");
+
+    const evento = {
+        summary: `Reunión NeuralOps - ${nombre}`,
+
+        description: `
+Cliente: ${nombre}
+Email: ${email}
+        `,
+
+        start: {
+            dateTime: inicio.toISOString(),
+            timeZone: "America/Argentina/Buenos_Aires"
+        },
+
+        end: {
+            dateTime: fin.toISOString(),
+            timeZone: "America/Argentina/Buenos_Aires"
+        },
+
+        attendees: [
+            { email },
+            { email: process.env.EMAIL_USER }
+        ]
+    };
+
+    const response = await calendar.events.insert({
+        calendarId,
+        resource: evento,
+        sendUpdates: "all"
+    });
+
+    return response.data;
+};

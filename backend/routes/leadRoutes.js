@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 
 import { crearLead } from "../controllers/leadController.js";
 import { eliminarLead, actualizarEstado } from "../controllers/leadController.js";
+import { horariosDisponibles, crearReunion } from "../controllers/reunionController.js";
 
 import Lead from "../models/Lead.js";
 import Admin from "../models/Admin.js";
@@ -134,5 +135,20 @@ router.put("/admin/update", verificarToken, async (req, res) => {
         res.status(500).json({ error: "Error actualizando admin" });
     }
 });
+
+
+
+// 📅 REUNIONES
+router.get(
+    "/horarios",
+    horariosDisponibles
+);
+
+router.post(
+    "/reunion",
+    crearReunion
+);
+
+
 
 export default router;
