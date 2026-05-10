@@ -78,6 +78,8 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variable files
+backend/google-calendar.json
+google.json
 .env
 .env.development.local
 .env.test.local
