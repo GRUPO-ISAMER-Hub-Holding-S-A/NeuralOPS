@@ -22,6 +22,9 @@ app.use(express.json());
 app.use("/api", leadRoutes);
 app.use(limiter);
 
+app.get("/", (req, res) => {
+    res.send("NeuralOps API funcionando 🚀");
+});
 
 console.log("ENV cargado:", !!process.env.EMAIL_USER);
 
