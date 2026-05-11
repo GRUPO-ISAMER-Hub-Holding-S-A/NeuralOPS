@@ -79,9 +79,9 @@ web_modules/
 
 # dotenv environment variable files
 .env
-#backend/google-calendar.json
+backend/google-calendar.json
 google.json
-#google-calendar.json
+google-calendar.json
 !package.json
 !package-lock.json
 .env.development.local
