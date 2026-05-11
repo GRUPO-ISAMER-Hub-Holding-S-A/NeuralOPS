@@ -88,11 +88,7 @@
 
         <br><br>
 
-        <input
-            id="buscar"
-            placeholder="Buscar..."
-            onkeyup="filtrar()"
-        >
+        <input id="buscar" placeholder="Buscar..." onkeyup="filtrar()">
 
         <table>
 
@@ -118,13 +114,43 @@
         let leadsGlobal = [];
 
         // AUTO LOGIN
-        const token = localStorage.getItem("token");
+        window.onload = async () => {
 
-        if (token) {
-            mostrarPanel();
-            cargarLeads();
-            mostrarUsuario(token);
-        }
+            const token = localStorage.getItem("token");
+
+            if (!token) return;
+
+            try {
+
+                const res = await fetch(
+                    "http://localhost:4000/api/leads",
+                    {
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        }
+                    }
+                );
+
+                if (!res.ok) {
+
+                    localStorage.removeItem("token");
+
+                    return;
+                }
+
+                mostrarPanel();
+
+                mostrarUsuario(token);
+
+                cargarLeads();
+
+            } catch (error) {
+
+                console.log(error);
+
+                localStorage.removeItem("token");
+            }
+        };
 
         // LOGIN
         async function login() {
@@ -233,8 +259,8 @@
 
                     <td>
                         ${new Date(
-                            l.fecha || l.createdAt
-                        ).toLocaleString()}
+                    l.fecha || l.createdAt
+                ).toLocaleString()}
                     </td>
 
                     <td>
@@ -285,20 +311,20 @@
 
             const texto =
                 document.getElementById("buscar")
-                .value
-                .toLowerCase();
+                    .value
+                    .toLowerCase();
 
             const filtrados = leadsGlobal.filter(l =>
 
                 (l.nombre || "")
-                .toLowerCase()
-                .includes(texto)
+                    .toLowerCase()
+                    .includes(texto)
 
                 ||
 
                 (l.email || "")
-                .toLowerCase()
-                .includes(texto)
+                    .toLowerCase()
+                    .includes(texto)
             );
 
             render(filtrados);
