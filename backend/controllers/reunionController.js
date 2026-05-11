@@ -11,6 +11,13 @@ export const horariosDisponibles = async (req, res) => {
 
         const { fecha } = req.query;
 
+        // ✅ VALIDACIÓN
+        if (!fecha) {
+            return res.status(400).json({
+                error: "Fecha requerida"
+            });
+        }
+
         const horarios =
             await obtenerHorariosDisponibles(fecha);
 
@@ -18,7 +25,7 @@ export const horariosDisponibles = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.log("❌ ERROR HORARIOS:", error);
 
         res.status(500).json({
             error: "Error obteniendo horarios"
@@ -39,9 +46,18 @@ export const crearReunion = async (req, res) => {
             hora
         } = req.body;
 
+        // ✅ VALIDACIONES
+        if (!nombre || !email || !fecha || !hora) {
+
+            return res.status(400).json({
+                error: "Faltan datos"
+            });
+        }
+
         const horarios =
             await obtenerHorariosDisponibles(fecha);
 
+        // ✅ VALIDAR DISPONIBILIDAD
         if (!horarios.includes(hora)) {
 
             return res.status(400).json({
@@ -49,6 +65,7 @@ export const crearReunion = async (req, res) => {
             });
         }
 
+        // ✅ CREAR EVENTO
         const evento = await crearEvento({
             nombre,
             email,
@@ -57,13 +74,13 @@ export const crearReunion = async (req, res) => {
         });
 
         res.json({
-            message: "Reunión agendada",
+            message: "Reunión agendada correctamente",
             evento
         });
 
     } catch (error) {
 
-        console.log(error);
+        console.log("❌ ERROR REUNIÓN:", error);
 
         res.status(500).json({
             error: "Error creando reunión"

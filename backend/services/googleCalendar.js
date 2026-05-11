@@ -11,13 +11,15 @@ const calendar = google.calendar({
     auth
 });
 
-const calendarId = "primary";
+// ✅ TU CALENDARIO REAL
+const calendarId = "fibromagiaplus@gmail.com";
 
 
 // 🔎 OBTENER HORARIOS LIBRES
 export const obtenerHorariosDisponibles = async (fecha) => {
 
     const inicio = dayjs(fecha).hour(9).minute(0).toISOString();
+
     const fin = dayjs(fecha).hour(18).minute(0).toISOString();
 
     const eventos = await calendar.events.list({
@@ -38,6 +40,7 @@ export const obtenerHorariosDisponibles = async (fecha) => {
     for (let h = 9; h < 18; h++) {
 
         const horaInicio = dayjs(fecha).hour(h).minute(0);
+
         const horaFin = horaInicio.add(1, "hour");
 
         const ocupado = ocupados.some(o =>
@@ -62,10 +65,18 @@ export const crearEvento = async ({
     hora
 }) => {
 
-    const inicio = dayjs(`${fecha} ${hora}`);
+    // ✅ FORMATO CORRECTO
+    const inicio = dayjs(`${fecha}T${hora}`);
+
+    // ✅ VALIDACIÓN
+    if (!inicio.isValid()) {
+        throw new Error("Fecha inválida");
+    }
+
     const fin = inicio.add(1, "hour");
 
     const evento = {
+
         summary: `Reunión NeuralOps - ${nombre}`,
 
         description: `
@@ -81,19 +92,20 @@ Email: ${email}
         end: {
             dateTime: fin.toISOString(),
             timeZone: "America/Argentina/Buenos_Aires"
-        },
-
-        attendees: [
-            { email },
-            { email: process.env.EMAIL_USER }
-        ]
+        }
     };
 
+    // ✅ CREAR EVENTO REAL
     const response = await calendar.events.insert({
+
+        // 🔥 USAR TU CALENDARIO REAL
         calendarId,
-        resource: evento,
-        sendUpdates: "all"
+
+        resource: evento
     });
+
+    console.log("✅ EVENTO CREADO:");
+    console.log(response.data.htmlLink);
 
     return response.data;
 };

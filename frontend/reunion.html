@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar reunión | NeuralOps</title>
+
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        body {
+            background: #050505;
+            color: white;
+            font-family: Inter;
+        }
+
+        .reunion-container {
+            max-width: 600px;
+            margin: 80px auto;
+            padding: 40px;
+            background: #111;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        input,
+        select,
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 15px;
+            border-radius: 10px;
+            border: none;
+        }
+
+        button {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="reunion-container">
+
+        <h1>Agendar reunión</h1>
+
+        <p>
+            Elegí un día y horario disponible.
+        </p>
+
+        <input type="text" id="nombre" placeholder="Nombre">
+
+        <input type="email" id="email" placeholder="Email">
+
+        <input type="date" id="fecha">
+
+        <select id="horarios">
+            <option>
+                Seleccionar horario
+            </option>
+        </select>
+
+        <button onclick="agendar()">
+            Confirmar reunión
+        </button>
+
+    </div>
+
+    <script>
+
+        const fechaInput =
+            document.getElementById("fecha");
+
+        fechaInput.addEventListener(
+            "change",
+            cargarHorarios
+        );
+
+        async function cargarHorarios() {
+
+            const fecha =
+                document.getElementById("fecha").value;
+
+            const res = await fetch(
+                `http://localhost:4000/api/horarios?fecha=${fecha}`
+            );
+
+            const horarios = await res.json();
+
+            const select =
+                document.getElementById("horarios");
+
+            select.innerHTML = "";
+
+            horarios.forEach(hora => {
+
+                select.innerHTML += `
+                    <option value="${hora}">
+                        ${hora}
+                    </option>
+                `;
+            });
+        }
+
+
+        async function agendar() {
+
+            const nombre =
+                document.getElementById("nombre").value;
+
+            const email =
+                document.getElementById("email").value;
+
+            const fecha =
+                document.getElementById("fecha").value;
+
+            const hora =
+                document.getElementById("horarios").value;
+
+            const res = await fetch(
+                "http://localhost:4000/api/reunion",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        nombre,
+                        email,
+                        fecha,
+                        hora
+                    })
+                }
+            );
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                alert(data.error);
+                return;
+            }
+
+            alert("✅ Reunión agendada correctamente");
+        }
+
+    </script>
+
+</body>
+
+</html>
