@@ -4,9 +4,14 @@ import dayjs from "dayjs";
 const auth = new google.auth.GoogleAuth({
     credentials: {
         client_email: process.env.GOOGLE_CLIENT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n')
+
+        private_key:
+            process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n')
     },
-    scopes: ["https://www.googleapis.com/auth/calendar"]
+
+    scopes: [
+        "https://www.googleapis.com/auth/calendar"
+    ]
 });
 
 const calendar = google.calendar({
@@ -14,7 +19,8 @@ const calendar = google.calendar({
     auth
 });
 
-const calendarId = process.env.GOOGLE_CALENDAR_ID;
+const calendarId =
+    process.env.GOOGLE_CALENDAR_ID;
 
 
 // 🔎 HORARIOS DISPONIBLES
@@ -24,26 +30,26 @@ export const obtenerHorariosDisponibles = async (fecha) => {
         throw new Error("Fecha requerida");
     }
 
-    const inicio = dayjs(fecha)
-        .hour(9)
-        .minute(0)
-        .second(0);
-
-    const fin = dayjs(fecha)
-        .hour(18)
-        .minute(0)
-        .second(0);
+    const inicio = dayjs(`${fecha}T09:00:00`);
+    const fin = dayjs(`${fecha}T18:00:00`);
 
     const eventos = await calendar.events.list({
+
         calendarId,
+
         timeMin: inicio.toISOString(),
+
         timeMax: fin.toISOString(),
+
         singleEvents: true,
+
         orderBy: "startTime"
     });
 
     const ocupados = eventos.data.items.map(evento => ({
+
         inicio: dayjs(evento.start.dateTime),
+
         fin: dayjs(evento.end.dateTime)
     }));
 
@@ -51,19 +57,20 @@ export const obtenerHorariosDisponibles = async (fecha) => {
 
     for (let h = 9; h < 18; h++) {
 
-        const horaInicio = dayjs(fecha)
-            .hour(h)
-            .minute(0)
-            .second(0);
+        const horaInicio =
+            dayjs(`${fecha}T${String(h).padStart(2, "0")}:00:00`);
 
-        const horaFin = horaInicio.add(1, "hour");
+        const horaFin =
+            horaInicio.add(1, "hour");
 
         const ocupado = ocupados.some(o =>
+
             horaInicio.isBefore(o.fin) &&
             horaFin.isAfter(o.inicio)
         );
 
         if (!ocupado) {
+
             horarios.push(
                 horaInicio.format("HH:mm")
             );
@@ -82,14 +89,19 @@ export const crearEvento = async ({
     hora
 }) => {
 
-    const inicio = dayjs(`${fecha} ${hora}`);
-    const fin = inicio.add(1, "hour");
+    const inicio =
+        dayjs(`${fecha}T${hora}:00`);
+
+    const fin =
+        inicio.add(1, "hour");
 
     const evento = {
 
-        summary: `Reunión NeuralOps - ${nombre}`,
+        summary:
+            `Reunión NeuralOps - ${nombre}`,
 
-        description: `
+        description:
+`
 Cliente: ${nombre}
 Email: ${email}
         `,
@@ -105,10 +117,13 @@ Email: ${email}
         }
     };
 
-    const response = await calendar.events.insert({
-        calendarId,
-        resource: evento
-    });
+    const response =
+        await calendar.events.insert({
+
+            calendarId,
+
+            resource: evento
+        });
 
     return response.data;
 };
