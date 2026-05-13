@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-dotenv.config(); 
+dotenv.config();
 
 import express from "express";
 import mongoose from "mongoose";
@@ -11,16 +11,17 @@ import leadRoutes from "./routes/leadRoutes.js";
 const app = express();
 
 app.use(cors());
+
 app.use(helmet());
+
 app.use(rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 100
 }));
 
 app.use(express.json());
 
 app.use("/api", leadRoutes);
-app.use(limiter);
 
 app.get("/", (req, res) => {
     res.send("NeuralOps API funcionando 🚀");
