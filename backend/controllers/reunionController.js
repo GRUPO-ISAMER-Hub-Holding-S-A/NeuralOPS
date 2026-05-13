@@ -24,14 +24,12 @@ export const horariosDisponibles = async (req, res) => {
         res.json(horarios);
 
     } catch (error) {
+console.log("ERROR GOOGLE:");
+console.log(error);
 
-        console.log("❌ ERROR HORARIOS:", error);
-
-        res.status(500).json({
-            error: "Error obteniendo horarios"
-        });
-    }
-};
+res.status(500).json({
+    error: error.message
+});
 
 
 // 📅 CREAR REUNIÓN
