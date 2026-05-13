@@ -32,27 +32,10 @@
             margin-top: 15px;
             border-radius: 10px;
             border: none;
-            box-sizing: border-box;
         }
 
         button {
             cursor: pointer;
-            background: white;
-            font-weight: bold;
-        }
-
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        select {
-            background: white;
-            color: black;
-        }
-
-        .loading {
-            opacity: 0.7;
         }
     </style>
 </head>
@@ -67,32 +50,19 @@
             Elegí un día y horario disponible.
         </p>
 
-        <input
-            type="text"
-            id="nombre"
-            placeholder="Nombre"
-        >
+        <input type="text" id="nombre" placeholder="Nombre">
 
-        <input
-            type="email"
-            id="email"
-            placeholder="Email"
-        >
+        <input type="email" id="email" placeholder="Email">
 
-        <input
-            type="date"
-            id="fecha"
-        >
+        <input type="date" id="fecha">
 
         <select id="horarios">
-
-            <option value="">
-                Primero seleccioná una fecha
+            <option>
+                Seleccionar horario
             </option>
-
         </select>
 
-        <button id="btnAgendar" onclick="agendar()">
+        <button onclick="agendar()">
             Confirmar reunión
         </button>
 
@@ -100,14 +70,11 @@
 
     <script>
 
-        // ✅ API RENDER
-        const API =
-            "https://neuralops-npet.onrender.com/api";
+        const API = "https://neuralops-npet.onrender.com/api";
 
         const fechaInput =
             document.getElementById("fecha");
 
-        // 🔥 CARGAR HORARIOS AL CAMBIAR FECHA
         fechaInput.addEventListener(
             "change",
             cargarHorarios
@@ -118,81 +85,28 @@
             const fecha =
                 document.getElementById("fecha").value;
 
+            const res = await fetch(
+                `https://neuralops-npet.onrender.com/api/horarios?fecha=${fecha}`
+            );
+
+            const horarios = await res.json();
+
             const select =
                 document.getElementById("horarios");
 
-            // RESET
-            select.innerHTML = `
-                <option>
-                    Cargando horarios...
-                </option>
-            `;
+            select.innerHTML = "";
 
-            try {
+            horarios.forEach(hora => {
 
-                const res = await fetch(
-                    `${API}/horarios?fecha=${fecha}`
-                );
-
-                // 🔥 SI RENDER TARDA
-                if (!res.ok) {
-
-                    select.innerHTML = `
-                        <option>
-                            Error cargando horarios
-                        </option>
-                    `;
-
-                    return;
-                }
-
-                const horarios = await res.json();
-
-                // 🔥 LIMPIAR
-                select.innerHTML = "";
-
-                // 🔥 SI NO HAY HORARIOS
-                if (!horarios.length) {
-
-                    select.innerHTML = `
-                        <option>
-                            No hay horarios disponibles
-                        </option>
-                    `;
-
-                    return;
-                }
-
-                // 🔥 PRIMER OPTION
                 select.innerHTML += `
-                    <option value="">
-                        Seleccionar horario
+                    <option value="${hora}">
+                        ${hora}
                     </option>
                 `;
-
-                // 🔥 RENDER HORARIOS
-                horarios.forEach(hora => {
-
-                    select.innerHTML += `
-                        <option value="${hora}">
-                            ${hora}
-                        </option>
-                    `;
-                });
-
-            } catch (error) {
-
-                console.log(error);
-
-                select.innerHTML = `
-                    <option>
-                        Error de conexión
-                    </option>
-                `;
-            }
+            });
         }
 
-        // 📅 AGENDAR REUNIÓN
+
         async function agendar() {
 
             const nombre =
@@ -207,86 +121,32 @@
             const hora =
                 document.getElementById("horarios").value;
 
-            const button =
-                document.getElementById("btnAgendar");
+            const res = await fetch(
+                "https://neuralops-npet.onrender.com/api/reunion",
+                {
+                    method: "POST",
 
-            // VALIDACIONES
-            if (!nombre || !email || !fecha || !hora) {
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
 
-                alert("Completá todos los campos");
+                    body: JSON.stringify({
+                        nombre,
+                        email,
+                        fecha,
+                        hora
+                    })
+                }
+            );
 
+            const data = await res.json();
+
+            if (!res.ok) {
+                alert(data.error);
                 return;
             }
 
-            try {
-
-                // 🔥 LOADING BUTTON
-                button.innerText = "Agendando...";
-                button.disabled = true;
-
-                const res = await fetch(
-                    `${API}/reunion`,
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-
-                        body: JSON.stringify({
-                            nombre,
-                            email,
-                            fecha,
-                            hora
-                        })
-                    }
-                );
-
-                const data = await res.json();
-
-                if (!res.ok) {
-
-                    alert(data.error || "Error");
-
-                    button.innerText =
-                        "Confirmar reunión";
-
-                    button.disabled = false;
-
-                    return;
-                }
-
-                alert(
-                    "✅ Reunión agendada correctamente"
-                );
-
-                // 🔥 LIMPIAR FORM
-                document.getElementById("nombre").value = "";
-
-                document.getElementById("email").value = "";
-
-                document.getElementById("fecha").value = "";
-
-                document.getElementById("horarios").innerHTML = `
-                    <option>
-                        Primero seleccioná una fecha
-                    </option>
-                `;
-
-            } catch (error) {
-
-                console.log(error);
-
-                alert("Error de conexión");
-
-            } finally {
-
-                // 🔥 RESTAURAR BOTON
-                button.innerText =
-                    "Confirmar reunión";
-
-                button.disabled = false;
-            }
+            alert("✅ Reunión agendada correctamente");
         }
 
     </script>

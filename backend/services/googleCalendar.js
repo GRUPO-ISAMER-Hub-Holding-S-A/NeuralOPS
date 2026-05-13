@@ -11,21 +11,29 @@ const calendar = google.calendar({
     auth
 });
 
-// ✅ TU CALENDARIO REAL
 const calendarId = "fibromagiaplus@gmail.com";
 
 
-// 🔎 OBTENER HORARIOS LIBRES
+// 🔎 HORARIOS DISPONIBLES
 export const obtenerHorariosDisponibles = async (fecha) => {
 
-    const inicio = dayjs(fecha).hour(9).minute(0).toISOString();
+    // VALIDACIÓN IMPORTANTE
+    if (!fecha) {
+        throw new Error("Fecha requerida");
+    }
 
-    const fin = dayjs(fecha).hour(18).minute(0).toISOString();
+    const inicio = dayjs(`${fecha}T09:00:00`);
+    const fin = dayjs(`${fecha}T18:00:00`);
+
+    // VALIDAR FECHA
+    if (!inicio.isValid() || !fin.isValid()) {
+        throw new Error("Fecha inválida");
+    }
 
     const eventos = await calendar.events.list({
         calendarId,
-        timeMin: inicio,
-        timeMax: fin,
+        timeMin: inicio.toISOString(),
+        timeMax: fin.toISOString(),
         singleEvents: true,
         orderBy: "startTime"
     });
@@ -39,17 +47,22 @@ export const obtenerHorariosDisponibles = async (fecha) => {
 
     for (let h = 9; h < 18; h++) {
 
-        const horaInicio = dayjs(fecha).hour(h).minute(0);
+        const horaInicio =
+            dayjs(`${fecha}T${String(h).padStart(2, "0")}:00:00`);
 
-        const horaFin = horaInicio.add(1, "hour");
+        const horaFin =
+            horaInicio.add(1, "hour");
 
         const ocupado = ocupados.some(o =>
+
             horaInicio.isBefore(o.fin) &&
             horaFin.isAfter(o.inicio)
         );
 
         if (!ocupado) {
-            horarios.push(horaInicio.format("HH:mm"));
+            horarios.push(
+                horaInicio.format("HH:mm")
+            );
         }
     }
 
@@ -65,21 +78,23 @@ export const crearEvento = async ({
     hora
 }) => {
 
-    // ✅ FORMATO CORRECTO
-    const inicio = dayjs(`${fecha}T${hora}`);
+    const inicio =
+        dayjs(`${fecha}T${hora}:00`);
 
-    // ✅ VALIDACIÓN
+    const fin =
+        inicio.add(1, "hour");
+
     if (!inicio.isValid()) {
-        throw new Error("Fecha inválida");
+        throw new Error("Fecha u hora inválida");
     }
-
-    const fin = inicio.add(1, "hour");
 
     const evento = {
 
-        summary: `Reunión NeuralOps - ${nombre}`,
+        summary:
+            `Reunión NeuralOps - ${nombre}`,
 
-        description: `
+        description:
+`
 Cliente: ${nombre}
 Email: ${email}
         `,
@@ -95,17 +110,10 @@ Email: ${email}
         }
     };
 
-    // ✅ CREAR EVENTO REAL
     const response = await calendar.events.insert({
-
-        // 🔥 USAR TU CALENDARIO REAL
         calendarId,
-
         resource: evento
     });
-
-    console.log("✅ EVENTO CREADO:");
-    console.log(response.data.htmlLink);
 
     return response.data;
 };
