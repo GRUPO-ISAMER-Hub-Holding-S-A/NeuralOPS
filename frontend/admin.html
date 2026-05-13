@@ -125,7 +125,7 @@
             try {
 
                 const res = await fetch(
-                    "https://neuralops-npet.onrender.com/api/lead",
+                    "https://neuralops-npet.onrender.com/api/leads",
                     {
                         headers: {
                             "Authorization": `Bearer ${token}`
@@ -216,7 +216,7 @@
             const token = localStorage.getItem("token");
 
             const res = await fetch(
-                "https://neuralops-npet.onrender.com/api/lead",
+                "https://neuralops-npet.onrender.com/api/leads",
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`
@@ -341,7 +341,7 @@
                 document.getElementById(`estado-${id}`).value;
 
             const res = await fetch(
-                `https://neuralops-npet.onrender.com/api/lead/${id}`,
+                `https://neuralops-npet.onrender.com/api/leads/${id}`,
                 {
                     method: "PUT",
 
@@ -376,7 +376,7 @@
             const token = localStorage.getItem("token");
 
             const res = await fetch(
-                `https://neuralops-npet.onrender.com/api/lead/${id}`,
+                `https://neuralops-npet.onrender.com/api/leads/${id}`,
                 {
                     method: "DELETE",
 

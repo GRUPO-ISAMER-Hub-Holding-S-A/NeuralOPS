@@ -163,7 +163,7 @@
             <input type="text" id="nombre" placeholder="Nombre" required>
             <input type="email" id="email" placeholder="Email" required>
             <textarea id="mensaje" placeholder="Contanos tu proyecto" required></textarea>
-            <button class="btn-primary">Enviar Consulta</button>
+            <button class="btn-primary" type="submit">Enviar Consulta</button>
         </form>
 
     </section>
@@ -192,7 +192,7 @@
 
             try {
 
-                const res = await fetch("https://neuralops-npet.onrender.com/api/lead", {
+                const res = await fetch("https://neuralops-npet.onrender.com/api/leads", {
 
                     method: "POST",
 

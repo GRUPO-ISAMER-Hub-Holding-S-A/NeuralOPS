@@ -51,14 +51,9 @@ export const crearLead = async (req, res) => {
     res.json({ message: "Lead guardado y email enviado" });
 
   } catch (error) {
-
-    console.log("ERROR BACK:");
-    console.log(error);
-
-    res.status(500).json({
-        error: error.message
-    });
-}
+    console.log("❌ Error:", error);
+    res.status(500).json({ error: "Error del servidor" });
+  }
 };
 
 
@@ -68,14 +63,8 @@ export const eliminarLead = async (req, res) => {
     await Lead.findByIdAndDelete(req.params.id);
     res.json({ message: "Lead eliminado" });
   } catch (error) {
-
-    console.log("ERROR BACK:");
-    console.log(error);
-
-    res.status(500).json({
-        error: error.message
-    });
-}
+    res.status(500).json({ error: "Error al eliminar" });
+  }
 };
 
 
@@ -92,12 +81,6 @@ export const actualizarEstado = async (req, res) => {
 
     res.json(lead);
   } catch (error) {
-
-    console.log("ERROR BACK:");
-    console.log(error);
-
-    res.status(500).json({
-        error: error.message
-    });
-}
+    res.status(500).json({ error: "Error al actualizar" });
+  }
 };
