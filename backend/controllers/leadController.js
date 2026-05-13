@@ -13,7 +13,6 @@ export const crearLead = async (req, res) => {
             mensaje
         } = req.body;
 
-        // VALIDACIÓN
         if (!nombre || !email || !mensaje) {
 
             return res.status(400).json({
@@ -32,7 +31,8 @@ export const crearLead = async (req, res) => {
 
         console.log("✅ Lead guardado");
 
-        // TRANSPORTER
+
+        // MAILER
         const transporter =
             nodemailer.createTransport({
 
@@ -44,20 +44,15 @@ export const crearLead = async (req, res) => {
                 }
             });
 
-        // TEST SMTP
-        await transporter.verify();
 
-        console.log("✅ SMTP conectado");
-
-
-        // 📧 MAIL INTERNO
+        // MAIL INTERNO
         await transporter.sendMail({
 
             from: process.env.EMAIL_USER,
 
             to: process.env.EMAIL_USER,
 
-            subject: "Nuevo lead NeuralOps 🚀",
+            subject: "Nuevo Lead NeuralOps 🚀",
 
             html: `
                 <h2>Nuevo Lead</h2>
@@ -79,10 +74,8 @@ export const crearLead = async (req, res) => {
             `
         });
 
-        console.log("✅ Mail interno enviado");
 
-
-        // 📧 MAIL CLIENTE
+        // MAIL CLIENTE
         await transporter.sendMail({
 
             from: process.env.EMAIL_USER,
@@ -92,9 +85,7 @@ export const crearLead = async (req, res) => {
             subject: "Recibimos tu solicitud 🚀",
 
             html: `
-                <h2>
-                    Hola ${nombre}
-                </h2>
+                <h2>Hola ${nombre}</h2>
 
                 <p>
                     Recibimos tu consulta correctamente.
@@ -110,17 +101,13 @@ export const crearLead = async (req, res) => {
             `
         });
 
-        console.log("✅ Mail cliente enviado");
-
-
-        // RESPUESTA FINAL
         res.json({
-            message: "Lead guardado y mails enviados"
+            message: "Lead enviado"
         });
 
     } catch (error) {
 
-        console.log("❌ ERROR REAL:");
+        console.log("❌ ERROR MAIL:");
         console.log(error);
 
         res.status(500).json({
@@ -130,8 +117,7 @@ export const crearLead = async (req, res) => {
 };
 
 
-
-// 🗑️ ELIMINAR LEAD
+// 🗑️ ELIMINAR
 export const eliminarLead = async (req, res) => {
 
     try {
@@ -149,21 +135,20 @@ export const eliminarLead = async (req, res) => {
         console.log(error);
 
         res.status(500).json({
-            error: "Error al eliminar"
+            error: "Error eliminando"
         });
     }
 };
 
 
-
-// ✏️ ACTUALIZAR ESTADO
+// ✏️ ACTUALIZAR
 export const actualizarEstado = async (req, res) => {
 
     try {
 
         const { estado } = req.body;
 
-        const lead =
+        const actualizado =
             await Lead.findByIdAndUpdate(
 
                 req.params.id,
@@ -173,14 +158,14 @@ export const actualizarEstado = async (req, res) => {
                 { new: true }
             );
 
-        res.json(lead);
+        res.json(actualizado);
 
     } catch (error) {
 
         console.log(error);
 
         res.status(500).json({
-            error: "Error al actualizar"
+            error: "Error actualizando"
         });
     }
 };
