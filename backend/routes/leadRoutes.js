@@ -2,11 +2,7 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-import {
-    crearLead,
-    eliminarLead,
-    actualizarEstado
-} from "../controllers/leadController.js";
+import { crearLead } from "../controllers/leadController.js";
 
 import {
     horariosDisponibles,
@@ -48,19 +44,57 @@ router.get("/leads", verificarToken, async (req, res) => {
 
 
 // 🗑️ ELIMINAR LEAD
-router.delete(
-    "/lead/:id",
-    verificarToken,
-    eliminarLead
-);
+router.delete("/lead/:id", verificarToken, async (req, res) => {
+
+    try {
+
+        await Lead.findByIdAndDelete(
+            req.params.id
+        );
+
+        res.json({
+            message: "Lead eliminado"
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+            error: "Error eliminando"
+        });
+    }
+});
 
 
 // ✏️ ACTUALIZAR ESTADO
-router.put(
-    "/lead/:id",
-    verificarToken,
-    actualizarEstado
-);
+router.put("/lead/:id", verificarToken, async (req, res) => {
+
+    try {
+
+        const { estado } = req.body;
+
+        const actualizado =
+            await Lead.findByIdAndUpdate(
+
+                req.params.id,
+
+                { estado },
+
+                { new: true }
+            );
+
+        res.json(actualizado);
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+            error: "Error actualizando"
+        });
+    }
+});
 
 
 // 🔐 LOGIN
