@@ -80,10 +80,11 @@ export const crearReunion = async (req, res) => {
 
     } catch (error) {
 
-        console.log("❌ ERROR REUNIÓN:", error);
+    console.log("ERROR REUNION:");
+    console.log(error);
 
-        res.status(500).json({
-            error: "Error creando reunión"
-        });
-    }
+    res.status(500).json({
+        error: error.message
+    });
+}
 };
