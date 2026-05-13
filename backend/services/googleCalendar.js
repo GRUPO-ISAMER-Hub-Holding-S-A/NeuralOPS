@@ -2,7 +2,10 @@ import { google } from "googleapis";
 import dayjs from "dayjs";
 
 const auth = new google.auth.GoogleAuth({
-    keyFile: "./google-calendar.json",
+    credentials: {
+        client_email: process.env.GOOGLE_CLIENT_EMAIL,
+        private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n')
+    },
     scopes: ["https://www.googleapis.com/auth/calendar"]
 });
 
@@ -11,24 +14,25 @@ const calendar = google.calendar({
     auth
 });
 
-const calendarId = "fibromagiaplus@gmail.com";
+const calendarId = process.env.GOOGLE_CALENDAR_ID;
 
 
 // 🔎 HORARIOS DISPONIBLES
 export const obtenerHorariosDisponibles = async (fecha) => {
 
-    // VALIDACIÓN IMPORTANTE
     if (!fecha) {
         throw new Error("Fecha requerida");
     }
 
-    const inicio = dayjs(`${fecha}T09:00:00`);
-    const fin = dayjs(`${fecha}T18:00:00`);
+    const inicio = dayjs(fecha)
+        .hour(9)
+        .minute(0)
+        .second(0);
 
-    // VALIDAR FECHA
-    if (!inicio.isValid() || !fin.isValid()) {
-        throw new Error("Fecha inválida");
-    }
+    const fin = dayjs(fecha)
+        .hour(18)
+        .minute(0)
+        .second(0);
 
     const eventos = await calendar.events.list({
         calendarId,
@@ -47,14 +51,14 @@ export const obtenerHorariosDisponibles = async (fecha) => {
 
     for (let h = 9; h < 18; h++) {
 
-        const horaInicio =
-            dayjs(`${fecha}T${String(h).padStart(2, "0")}:00:00`);
+        const horaInicio = dayjs(fecha)
+            .hour(h)
+            .minute(0)
+            .second(0);
 
-        const horaFin =
-            horaInicio.add(1, "hour");
+        const horaFin = horaInicio.add(1, "hour");
 
         const ocupado = ocupados.some(o =>
-
             horaInicio.isBefore(o.fin) &&
             horaFin.isAfter(o.inicio)
         );
@@ -78,23 +82,14 @@ export const crearEvento = async ({
     hora
 }) => {
 
-    const inicio =
-        dayjs(`${fecha}T${hora}:00`);
-
-    const fin =
-        inicio.add(1, "hour");
-
-    if (!inicio.isValid()) {
-        throw new Error("Fecha u hora inválida");
-    }
+    const inicio = dayjs(`${fecha} ${hora}`);
+    const fin = inicio.add(1, "hour");
 
     const evento = {
 
-        summary:
-            `Reunión NeuralOps - ${nombre}`,
+        summary: `Reunión NeuralOps - ${nombre}`,
 
-        description:
-`
+        description: `
 Cliente: ${nombre}
 Email: ${email}
         `,
