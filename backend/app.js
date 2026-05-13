@@ -34,6 +34,8 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("Mongo conectado ✅"))
   .catch(err => console.log(err));
 
-app.listen(process.env.PORT, () => {
-  console.log("Servidor corriendo en puerto", process.env.PORT);
+const PORT = process.env.PORT || 4000;
+
+app.listen(PORT, () => {
+  console.log("Servidor corriendo en puerto", PORT);
 });
