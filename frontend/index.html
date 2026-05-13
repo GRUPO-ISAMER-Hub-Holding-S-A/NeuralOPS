@@ -75,11 +75,11 @@
                 FIBROMAGIAPLUS
             </a>
 
-            <a href="https://ilevent.com" target="_blank" class="partner-btn">
+            <a href="https://" target="_blank" class="partner-btn">
                 ILEVENT
             </a>
 
-            <a href="https://bigbossimportaciones.com" target="_blank" class="partner-btn">
+            <a href="https://" target="_blank" class="partner-btn">
                 BIG BOSS IMPORTACIONES
             </a>
 
@@ -178,6 +178,8 @@
 
     <script>
 
+        const API = "https://neuralops-npet.onrender.com/api";
+
         const form = document.getElementById("leadForm");
 
         form.addEventListener("submit", async (e) => {
@@ -190,7 +192,7 @@
 
             try {
 
-                const res = await fetch("http://localhost:4000/api/lead", {
+                const res = await fetch("https://neuralops-npet.onrender.com/api/lead", {
 
                     method: "POST",
 
