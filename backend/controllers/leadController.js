@@ -2,7 +2,9 @@ import Lead from "../models/Lead.js";
 import nodemailer from "nodemailer";
 
 
+// ===============================
 // 📩 CREAR LEAD
+// ===============================
 export const crearLead = async (req, res) => {
 
     try {
@@ -35,7 +37,7 @@ export const crearLead = async (req, res) => {
 
 
         // =========================
-        // MAIL (NO ROMPER SISTEMA)
+        // 📧 MAILS
         // =========================
 
         try {
@@ -50,7 +52,6 @@ export const crearLead = async (req, res) => {
                         pass: process.env.EMAIL_PASS
                     }
                 });
-
 
             // MAIL INTERNO
             await transporter.sendMail({
@@ -116,7 +117,7 @@ export const crearLead = async (req, res) => {
             console.log(mailError);
         }
 
-        // RESPUESTA OK SIEMPRE
+        // RESPUESTA OK
         res.json({
             message: "Lead guardado correctamente"
         });
@@ -128,6 +129,79 @@ export const crearLead = async (req, res) => {
 
         res.status(500).json({
             error: "Error del servidor"
+        });
+    }
+};
+
+
+// ===============================
+// 🗑️ ELIMINAR LEAD
+// ===============================
+export const eliminarLead = async (req, res) => {
+
+    try {
+
+        const eliminado =
+            await Lead.findByIdAndDelete(req.params.id);
+
+        if (!eliminado) {
+
+            return res.status(404).json({
+                error: "Lead no encontrado"
+            });
+        }
+
+        res.json({
+            message: "Lead eliminado correctamente"
+        });
+
+    } catch (error) {
+
+        console.log("❌ ERROR ELIMINAR:");
+        console.log(error);
+
+        res.status(500).json({
+            error: "Error al eliminar lead"
+        });
+    }
+};
+
+
+// ===============================
+// ✏️ ACTUALIZAR ESTADO
+// ===============================
+export const actualizarEstado = async (req, res) => {
+
+    try {
+
+        const { estado } = req.body;
+
+        const actualizado =
+            await Lead.findByIdAndUpdate(
+
+                req.params.id,
+
+                { estado },
+
+                { new: true }
+            );
+
+        if (!actualizado) {
+
+            return res.status(404).json({
+                error: "Lead no encontrado"
+            });
+        }
+
+        res.json(actualizado);
+
+    } catch (error) {
+
+        console.log("❌ ERROR ACTUALIZAR:");
+        console.log(error);
+
+        res.status(500).json({
+            error: "Error al actualizar"
         });
     }
 };
