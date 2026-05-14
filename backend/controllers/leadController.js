@@ -13,6 +13,7 @@ export const crearLead = async (req, res) => {
             mensaje
         } = req.body;
 
+        // VALIDAR
         if (!nombre || !email || !mensaje) {
 
             return res.status(400).json({
@@ -20,10 +21,12 @@ export const crearLead = async (req, res) => {
             });
         }
 
+        // GUARDAR LEAD
         const nuevoLead = new Lead({
             nombre,
             email,
-            mensaje
+            mensaje,
+            estado: "nuevo"
         });
 
         await nuevoLead.save();
@@ -31,6 +34,7 @@ export const crearLead = async (req, res) => {
         console.log("✅ Lead guardado");
 
 
+        // TRANSPORTER
         const transporter =
             nodemailer.createTransport({
 
@@ -55,11 +59,20 @@ export const crearLead = async (req, res) => {
             html: `
                 <h2>Nuevo Lead</h2>
 
-                <p><strong>Nombre:</strong> ${nombre}</p>
+                <p>
+                    <strong>Nombre:</strong>
+                    ${nombre}
+                </p>
 
-                <p><strong>Email:</strong> ${email}</p>
+                <p>
+                    <strong>Email:</strong>
+                    ${email}
+                </p>
 
-                <p><strong>Mensaje:</strong> ${mensaje}</p>
+                <p>
+                    <strong>Mensaje:</strong>
+                    ${mensaje}
+                </p>
             `
         });
 
@@ -77,22 +90,26 @@ export const crearLead = async (req, res) => {
                 <h2>Hola ${nombre}</h2>
 
                 <p>
-                    Recibimos tu solicitud correctamente.
+                    Recibimos tu consulta correctamente.
                 </p>
 
                 <p>
                     En breve nos contactaremos con vos.
                 </p>
+
+                <p>
+                    Equipo NeuralOps 🚀
+                </p>
             `
         });
 
         res.json({
-            message: "Lead guardado"
+            message: "Lead enviado correctamente"
         });
 
     } catch (error) {
 
-        console.log("❌ ERROR MAIL:");
+        console.log("❌ ERROR CREAR LEAD:");
         console.log(error);
 
         res.status(500).json({

@@ -4,10 +4,7 @@ import bcrypt from "bcrypt";
 
 import { crearLead } from "../controllers/leadController.js";
 
-import {
-    horariosDisponibles,
-    crearReunion
-} from "../controllers/reunionController.js";
+import { horariosDisponibles, crearReunion } from "../controllers/reunionController.js";
 
 import Lead from "../models/Lead.js";
 import Admin from "../models/Admin.js";
@@ -44,13 +41,20 @@ router.get("/leads", verificarToken, async (req, res) => {
 
 
 // 🗑️ ELIMINAR LEAD
+
 router.delete("/lead/:id", verificarToken, async (req, res) => {
 
     try {
 
-        await Lead.findByIdAndDelete(
-            req.params.id
-        );
+        const eliminado =
+            await Lead.findByIdAndDelete(req.params.id);
+
+        if (!eliminado) {
+
+            return res.status(404).json({
+                error: "Lead no encontrado"
+            });
+        }
 
         res.json({
             message: "Lead eliminado"
@@ -58,6 +62,7 @@ router.delete("/lead/:id", verificarToken, async (req, res) => {
 
     } catch (error) {
 
+        console.log("❌ ERROR DELETE:");
         console.log(error);
 
         res.status(500).json({
@@ -68,6 +73,7 @@ router.delete("/lead/:id", verificarToken, async (req, res) => {
 
 
 // ✏️ ACTUALIZAR ESTADO
+
 router.put("/lead/:id", verificarToken, async (req, res) => {
 
     try {
@@ -84,10 +90,18 @@ router.put("/lead/:id", verificarToken, async (req, res) => {
                 { new: true }
             );
 
+        if (!actualizado) {
+
+            return res.status(404).json({
+                error: "Lead no encontrado"
+            });
+        }
+
         res.json(actualizado);
 
     } catch (error) {
 
+        console.log("❌ ERROR UPDATE:");
         console.log(error);
 
         res.status(500).json({
