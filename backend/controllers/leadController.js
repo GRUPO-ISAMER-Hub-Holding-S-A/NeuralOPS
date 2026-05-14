@@ -111,11 +111,15 @@ export const crearLead = async (req, res) => {
 
             console.log("✅ Mails enviados");
 
-        } catch (mailError) {
+} catch (mailError) {
 
-            console.log("❌ ERROR MAIL:");
-            console.log(mailError);
-        }
+    console.log("❌ ERROR MAIL COMPLETO:");
+    console.log(mailError);
+
+    return res.status(500).json({
+        error: "Error enviando mail"
+    });
+}
 
         // RESPUESTA OK
         res.json({
