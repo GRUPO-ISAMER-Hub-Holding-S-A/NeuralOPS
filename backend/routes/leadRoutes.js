@@ -41,19 +41,70 @@ router.get("/leads", verificarToken, async (req, res) => {
 
 
 // 🗑️ ELIMINAR LEAD
-router.delete(
-    "/lead/:id",
-    verificarToken,
-    eliminarLead
-);
+router.delete("/lead/:id", verificarToken, async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        const eliminado =
+            await Lead.findByIdAndDelete(id);
+
+        if (!eliminado) {
+
+            return res.status(404).json({
+                error: "Lead no encontrado"
+            });
+        }
+
+        res.json({
+            message: "Lead eliminado correctamente"
+        });
+
+    } catch (error) {
+
+        console.log("❌ Error eliminar:", error);
+
+        res.status(500).json({
+            error: "Error al eliminar lead"
+        });
+    }
+});
 
 
 // ✏️ ACTUALIZAR ESTADO
-router.put(
-    "/lead/:id",
-    verificarToken,
-    actualizarEstado
-);
+router.put("/lead/:id", verificarToken, async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+        const { estado } = req.body;
+
+        const actualizado =
+            await Lead.findByIdAndUpdate(
+                id,
+                { estado },
+                { new: true }
+            );
+
+        if (!actualizado) {
+
+            return res.status(404).json({
+                error: "Lead no encontrado"
+            });
+        }
+
+        res.json(actualizado);
+
+    } catch (error) {
+
+        console.log("❌ Error actualizar:", error);
+
+        res.status(500).json({
+            error: "Error al actualizar estado"
+        });
+    }
+});
 
 
 // 🔐 LOGIN
@@ -120,6 +171,3 @@ router.post(
 );
 
 export default router;
-
-
-
