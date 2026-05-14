@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 import { crearLead } from "../controllers/leadController.js";
-import { eliminarLead, actualizarEstado } from "../controllers/leadController.js";
+
 import { horariosDisponibles, crearReunion } from "../controllers/reunionController.js";
 
 import Lead from "../models/Lead.js";
