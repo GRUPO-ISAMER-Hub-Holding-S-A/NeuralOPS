@@ -3,10 +3,15 @@ import dayjs from "dayjs";
 
 const auth = new google.auth.GoogleAuth({
     credentials: {
-        client_email: process.env.GOOGLE_CLIENT_EMAIL,
+        type: "service_account",
+        project_id: process.env.GOOGLE_PROJECT_ID,
+        private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
 
-        private_key:
-            process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n')
+        private_key: process.env.GOOGLE_PRIVATE_KEY
+            .replace(/\\n/g, "\n"),
+
+        client_email: process.env.GOOGLE_CLIENT_EMAIL,
+        client_id: process.env.GOOGLE_CLIENT_ID,
     },
 
     scopes: [
@@ -19,111 +24,128 @@ const calendar = google.calendar({
     auth
 });
 
-const calendarId =
-    process.env.GOOGLE_CALENDAR_ID;
+const CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID;
 
 
-// 🔎 HORARIOS DISPONIBLES
-export const obtenerHorariosDisponibles = async (fecha) => {
+// HORARIOS DISPONIBLES
+export async function obtenerHorariosDisponibles(fecha) {
 
-    if (!fecha) {
-        throw new Error("Fecha requerida");
-    }
+    try {
 
-    const inicio = dayjs(`${fecha}T09:00:00`);
-    const fin = dayjs(`${fecha}T18:00:00`);
-
-    const eventos = await calendar.events.list({
-
-        calendarId,
-
-        timeMin: inicio.toISOString(),
-
-        timeMax: fin.toISOString(),
-
-        singleEvents: true,
-
-        orderBy: "startTime"
-    });
-
-    const ocupados = eventos.data.items.map(evento => ({
-
-        inicio: dayjs(evento.start.dateTime),
-
-        fin: dayjs(evento.end.dateTime)
-    }));
-
-    const horarios = [];
-
-    for (let h = 9; h < 18; h++) {
-
-        const horaInicio =
-            dayjs(`${fecha}T${String(h).padStart(2, "0")}:00:00`);
-
-        const horaFin =
-            horaInicio.add(1, "hour");
-
-        const ocupado = ocupados.some(o =>
-
-            horaInicio.isBefore(o.fin) &&
-            horaFin.isAfter(o.inicio)
-        );
-
-        if (!ocupado) {
-
-            horarios.push(
-                horaInicio.format("HH:mm")
-            );
+        if (!fecha) {
+            return [];
         }
+
+        const inicioDia =
+            dayjs(fecha)
+                .hour(9)
+                .minute(0)
+                .second(0);
+
+        const finDia =
+            dayjs(fecha)
+                .hour(18)
+                .minute(0)
+                .second(0);
+
+        const response =
+            await calendar.events.list({
+
+                calendarId: CALENDAR_ID,
+
+                timeMin: inicioDia.toISOString(),
+
+                timeMax: finDia.toISOString(),
+
+                singleEvents: true,
+
+                orderBy: "startTime",
+            });
+
+        const eventos =
+            response.data.items || [];
+
+        const ocupados =
+            eventos.map(e =>
+                dayjs(
+                    e.start.dateTime
+                ).format("HH:mm")
+            );
+
+        const horarios = [];
+
+        for (let hora = 9; hora <= 17; hora++) {
+
+            const h =
+                `${hora.toString().padStart(2, "0")}:00`;
+
+            if (!ocupados.includes(h)) {
+                horarios.push(h);
+            }
+        }
+
+        return horarios;
+
+    } catch (error) {
+
+        console.log("❌ ERROR HORARIOS:", error);
+
+        return [];
     }
-
-    return horarios;
-};
+}
 
 
-// 📅 CREAR EVENTO
-export const crearEvento = async ({
+// CREAR EVENTO
+export async function crearEventoGoogle({
     nombre,
     email,
     fecha,
     hora
-}) => {
+}) {
 
-    const inicio =
-        dayjs(`${fecha}T${hora}:00`);
+    try {
 
-    const fin =
-        inicio.add(1, "hour");
+        const inicio =
+            dayjs(`${fecha} ${hora}`);
 
-    const evento = {
+        const fin =
+            inicio.add(1, "hour");
 
-        summary:
-            `Reunión NeuralOps - ${nombre}`,
+        const evento = {
 
-        description:
-`
-Cliente: ${nombre}
-Email: ${email}
-        `,
+            summary: `Reunión con ${nombre}`,
 
-        start: {
-            dateTime: inicio.toISOString(),
-            timeZone: "America/Argentina/Buenos_Aires"
-        },
+            description:
+                `Cliente: ${email}`,
 
-        end: {
-            dateTime: fin.toISOString(),
-            timeZone: "America/Argentina/Buenos_Aires"
-        }
-    };
+            start: {
+                dateTime: inicio.toISOString(),
+                timeZone: "America/Argentina/Buenos_Aires"
+            },
 
-    const response =
-        await calendar.events.insert({
+            end: {
+                dateTime: fin.toISOString(),
+                timeZone: "America/Argentina/Buenos_Aires"
+            }
+        };
 
-            calendarId,
+        const response =
+            await calendar.events.insert({
 
-            resource: evento
-        });
+                calendarId: CALENDAR_ID,
 
-    return response.data;
-};
+                resource: evento
+            });
+
+        console.log("✅ Evento creado");
+
+        return response.data;
+
+    } catch (error) {
+
+        console.log("❌ ERROR CREAR EVENTO:");
+        console.log(error);
+
+        throw error;
+    }
+}

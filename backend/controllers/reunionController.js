@@ -11,10 +11,11 @@ export const horariosDisponibles = async (req, res) => {
 
         const { fecha } = req.query;
 
-        // ✅ VALIDACIÓN
-        if (!fecha) {
+        // VALIDAR FECHA
+        if (!fecha || fecha === "undefined") {
+
             return res.status(400).json({
-                error: "Fecha requerida"
+                error: "Fecha inválida"
             });
         }
 
