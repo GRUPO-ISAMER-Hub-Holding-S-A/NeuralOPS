@@ -67,7 +67,7 @@ export const crearReunion = async (req, res) => {
         }
 
         // ✅ CREAR EVENTO
-        const evento = await crearEvento({
+        const evento = await crearEventoGoogle({
             nombre,
             email,
             fecha,
