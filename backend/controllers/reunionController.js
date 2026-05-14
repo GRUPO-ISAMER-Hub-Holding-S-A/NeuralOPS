@@ -1,23 +1,15 @@
 import {
     obtenerHorariosDisponibles,
-    crearEvento
+    crearEventoGoogle
 } from "../services/googleCalendar.js";
 
 
-// 🔎 HORARIOS DISPONIBLES
+// 📅 OBTENER HORARIOS
 export const horariosDisponibles = async (req, res) => {
 
     try {
 
         const { fecha } = req.query;
-
-        // VALIDAR FECHA
-        if (!fecha || fecha === "undefined") {
-
-            return res.status(400).json({
-                error: "Fecha inválida"
-            });
-        }
 
         const horarios =
             await obtenerHorariosDisponibles(fecha);
@@ -35,7 +27,7 @@ export const horariosDisponibles = async (req, res) => {
 };
 
 
-// 📅 CREAR REUNIÓN
+// 📅 CREAR REUNION
 export const crearReunion = async (req, res) => {
 
     try {
@@ -47,27 +39,7 @@ export const crearReunion = async (req, res) => {
             hora
         } = req.body;
 
-        // ✅ VALIDACIONES
-        if (!nombre || !email || !fecha || !hora) {
-
-            return res.status(400).json({
-                error: "Faltan datos"
-            });
-        }
-
-        const horarios =
-            await obtenerHorariosDisponibles(fecha);
-
-        // ✅ VALIDAR DISPONIBILIDAD
-        if (!horarios.includes(hora)) {
-
-            return res.status(400).json({
-                error: "Horario no disponible"
-            });
-        }
-
-        // ✅ CREAR EVENTO
-        const evento = await crearEventoGoogle({
+        await crearEventoGoogle({
             nombre,
             email,
             fecha,
@@ -75,13 +47,12 @@ export const crearReunion = async (req, res) => {
         });
 
         res.json({
-            message: "Reunión agendada correctamente",
-            evento
+            message: "Reunión agendada correctamente"
         });
 
     } catch (error) {
 
-        console.log("❌ ERROR REUNIÓN:", error);
+        console.log("❌ ERROR REUNION:", error);
 
         res.status(500).json({
             error: "Error creando reunión"
