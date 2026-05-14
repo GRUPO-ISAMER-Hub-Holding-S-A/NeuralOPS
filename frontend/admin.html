@@ -341,7 +341,7 @@
                 document.getElementById(`estado-${id}`).value;
 
             const res = await fetch(
-                `https://neuralops-npet.onrender.com/api/leads/${id}`,
+                `https://neuralops-npet.onrender.com/api/lead/${id}`,
                 {
                     method: "PUT",
 
@@ -376,7 +376,7 @@
             const token = localStorage.getItem("token");
 
             const res = await fetch(
-                `https://neuralops-npet.onrender.com/api/leads/${id}`,
+                `https://neuralops-npet.onrender.com/api/lead/${id}`,
                 {
                     method: "DELETE",
 
