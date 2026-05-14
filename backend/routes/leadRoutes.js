@@ -58,7 +58,7 @@ router.put("/lead/:id", verificarToken, async (req, res) => {
         const actualizado = await Lead.findByIdAndUpdate(
             id,
             { estado },
-            { returnDocument: "after" }
+            { new: true }
         );
 
         if (!actualizado) {

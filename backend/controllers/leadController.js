@@ -34,86 +34,100 @@ export const crearLead = async (req, res) => {
         console.log("✅ Lead guardado");
 
 
-        // TRANSPORTER
-        const transporter =
-            nodemailer.createTransport({
+        // =========================
+        // MAIL (NO ROMPER SISTEMA)
+        // =========================
 
-                service: "gmail",
+        try {
 
-                auth: {
-                    user: process.env.EMAIL_USER,
-                    pass: process.env.EMAIL_PASS
-                }
+            const transporter =
+                nodemailer.createTransport({
+
+                    service: "gmail",
+
+                    auth: {
+                        user: process.env.EMAIL_USER,
+                        pass: process.env.EMAIL_PASS
+                    }
+                });
+
+
+            // MAIL INTERNO
+            await transporter.sendMail({
+
+                from: process.env.EMAIL_USER,
+
+                to: process.env.EMAIL_USER,
+
+                subject: "Nuevo lead NeuralOps 🚀",
+
+                html: `
+                    <h2>Nuevo Lead</h2>
+
+                    <p>
+                        <strong>Nombre:</strong>
+                        ${nombre}
+                    </p>
+
+                    <p>
+                        <strong>Email:</strong>
+                        ${email}
+                    </p>
+
+                    <p>
+                        <strong>Mensaje:</strong>
+                        ${mensaje}
+                    </p>
+                `
             });
 
 
-        // MAIL INTERNO
-        await transporter.sendMail({
+            // MAIL CLIENTE
+            await transporter.sendMail({
 
-            from: process.env.EMAIL_USER,
+                from: process.env.EMAIL_USER,
 
-            to: process.env.EMAIL_USER,
+                to: email,
 
-            subject: "Nuevo lead NeuralOps 🚀",
+                subject: "Recibimos tu solicitud 🚀",
 
-            html: `
-                <h2>Nuevo Lead</h2>
+                html: `
+                    <h2>Hola ${nombre}</h2>
 
-                <p>
-                    <strong>Nombre:</strong>
-                    ${nombre}
-                </p>
+                    <p>
+                        Recibimos tu consulta correctamente.
+                    </p>
 
-                <p>
-                    <strong>Email:</strong>
-                    ${email}
-                </p>
+                    <p>
+                        En breve nos contactaremos con vos.
+                    </p>
 
-                <p>
-                    <strong>Mensaje:</strong>
-                    ${mensaje}
-                </p>
-            `
-        });
+                    <p>
+                        Equipo NeuralOps 🚀
+                    </p>
+                `
+            });
 
+            console.log("✅ Mails enviados");
 
-        // MAIL CLIENTE
-        await transporter.sendMail({
+        } catch (mailError) {
 
-            from: process.env.EMAIL_USER,
+            console.log("❌ ERROR MAIL:");
+            console.log(mailError);
+        }
 
-            to: email,
-
-            subject: "Recibimos tu solicitud 🚀",
-
-            html: `
-                <h2>Hola ${nombre}</h2>
-
-                <p>
-                    Recibimos tu consulta correctamente.
-                </p>
-
-                <p>
-                    En breve nos contactaremos con vos.
-                </p>
-
-                <p>
-                    Equipo NeuralOps 🚀
-                </p>
-            `
-        });
-
+        // RESPUESTA OK SIEMPRE
         res.json({
-            message: "Lead enviado correctamente"
+            message: "Lead guardado correctamente"
         });
 
     } catch (error) {
 
-        console.log("❌ ERROR CREAR LEAD:");
+        console.log("❌ ERROR GENERAL:");
         console.log(error);
 
         res.status(500).json({
-            error: "Error al enviar"
+            error: "Error del servidor"
         });
     }
 };
