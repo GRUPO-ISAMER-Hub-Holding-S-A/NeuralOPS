@@ -2,11 +2,7 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-import {
-    crearLead,
-    eliminarLead,
-    actualizarEstado
-} from "../controllers/leadController.js";
+import { crearLead } from "../controllers/leadController.js";
 
 import {
     horariosDisponibles,

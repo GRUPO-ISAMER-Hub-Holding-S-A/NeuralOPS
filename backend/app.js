@@ -10,14 +10,14 @@ import leadRoutes from "./routes/leadRoutes.js";
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 app.use(cors());
 
 app.use(helmet());
 
-app.use(rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100
-}));
+
+app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100}));
 
 app.use(express.json());
 
