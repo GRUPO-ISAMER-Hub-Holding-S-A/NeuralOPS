@@ -2,9 +2,7 @@ import Lead from "../models/Lead.js";
 import nodemailer from "nodemailer";
 
 
-// ===============================
 // 📩 CREAR LEAD
-// ===============================
 export const crearLead = async (req, res) => {
 
     try {
@@ -23,7 +21,10 @@ export const crearLead = async (req, res) => {
             });
         }
 
+        // =========================
         // GUARDAR LEAD
+        // =========================
+
         const nuevoLead = new Lead({
             nombre,
             email,
@@ -36,12 +37,14 @@ export const crearLead = async (req, res) => {
         console.log("✅ Lead guardado");
 
 
-        // =========================
-        // 📧 MAILS
-        // =========================
 
+        // =========================
+        // ENVIAR MAIL
+        // =========================
 
         try {
+
+            console.log("EMAIL_USER:", process.env.EMAIL_USER);
 
             const transporter =
                 nodemailer.createTransport({
@@ -54,21 +57,21 @@ export const crearLead = async (req, res) => {
 
                     requireTLS: true,
 
-                    family: 4,
-
                     auth: {
                         user: process.env.EMAIL_USER,
                         pass: process.env.EMAIL_PASS
+                    },
+
+                    tls: {
+                        rejectUnauthorized: false
                     }
                 });
 
-            console.log("EMAIL_USER:", process.env.EMAIL_USER);
-            console.log("EMAIL_PASS EXISTE:", !!process.env.EMAIL_PASS);
 
-            // MAIL INTERNO
+            // MAIL EMPRESA
             await transporter.sendMail({
 
-                from: process.env.EMAIL_USER,
+                from: `"NeuralOps" <${process.env.EMAIL_USER}>`,
 
                 to: process.env.EMAIL_USER,
 
@@ -98,11 +101,11 @@ export const crearLead = async (req, res) => {
             // MAIL CLIENTE
             await transporter.sendMail({
 
-                from: process.env.EMAIL_USER,
+                from: `"NeuralOps" <${process.env.EMAIL_USER}>`,
 
                 to: email,
 
-                subject: "Recibimos tu solicitud 🚀",
+                subject: "Recibimos tu consulta 🚀",
 
                 html: `
                     <h2>Hola ${nombre}</h2>
@@ -121,20 +124,21 @@ export const crearLead = async (req, res) => {
                 `
             });
 
-            console.log("✅ Mails enviados");
+            console.log("✅ MAILS ENVIADOS");
 
         } catch (mailError) {
 
             console.log("❌ ERROR MAIL COMPLETO:");
             console.log(mailError);
-
-            return res.status(500).json({
-                error: "Error enviando mail"
-            });
         }
 
+
+        // =========================
         // RESPUESTA OK
+        // =========================
+
         res.json({
+            ok: true,
             message: "Lead guardado correctamente"
         });
 

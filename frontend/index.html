@@ -157,36 +157,21 @@
 
 <script>
 
-    emailjs.init("RUoC2iRPEQwCmdfzk");
+        const API = "https://neuralops-npet.onrender.com/api";
 
+        const form = document.getElementById("leadForm");
 
-    const API = "https://neuralops-npet.onrender.com/api";
+        form.addEventListener("submit", async (e) => {
 
-    const form = document.getElementById("leadForm");
+            e.preventDefault();
 
+            const nombre = document.getElementById("nombre").value;
+            const email = document.getElementById("email").value;
+            const mensaje = document.getElementById("mensaje").value;
 
-    form.addEventListener("submit", async (e) => {
+            try {
 
-        e.preventDefault();
-
-        const nombre =
-            document.getElementById("nombre").value;
-
-        const email =
-            document.getElementById("email").value;
-
-        const mensaje =
-            document.getElementById("mensaje").value;
-
-        try {
-
-            // =========================
-            // GUARDAR LEAD
-            // =========================
-
-            const res = await fetch(
-                "https://neuralops-npet.onrender.com/api/lead",
-                {
+                const res = await fetch("https://neuralops-npet.onrender.com/api/lead", {
 
                     method: "POST",
 
@@ -199,60 +184,25 @@
                         email,
                         mensaje
                     })
-                }
-            );
 
+                });
 
-            // =========================
-            // EMAILJS
-            // =========================
+                const data = await res.json();
 
-            try {
+                alert("Consulta enviada 🚀");
+                window.location.href = "index.html";
 
-                await emailjs.send(
+                form.reset();
 
-                    "service_kwenvvc",
+            } catch (error) {
 
-                    "template_nlcavg2",
+                alert("Error al enviar");
 
-                    {
-                        nombre,
-                        email,
-                        mensaje
-                    }
-                );
-
-                console.log("✅ Mail enviado");
-
-            } catch (mailError) {
-
-                console.log("❌ Error EmailJS");
-                console.log(mailError);
             }
 
+        });
 
-            // =========================
-            // OK
-            // =========================
-
-            alert("Consulta enviada 🚀");
-
-            form.reset();
-
-            window.location.href = "index.html";
-
-
-        } catch (error) {
-
-            console.log(error);
-
-            alert("Error al guardar lead");
-        }
-
-    });
-
-</script>
-
+    </script>
 
 
     <!-- 🔐 ACCESO ADMIN OCULTO -->
@@ -265,7 +215,7 @@
         opacity: 0;
         cursor: pointer;
         z-index: 9999;
-      "></div>
+    "></div>
 
     <script>
         let clicks = 0;
@@ -288,7 +238,6 @@
         });
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </body>
 
 </html>
