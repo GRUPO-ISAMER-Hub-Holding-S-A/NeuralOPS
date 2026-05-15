@@ -47,7 +47,7 @@ export const crearLead = async (req, res) => {
 
             await resend.emails.send({
 
-                from: "NeuralOps <fibromagiaplus@gmail.com>",
+                from: "NeuralOps <onboarding@resend.dev>",
 
                 to: process.env.EMAIL_USER,
 
@@ -72,6 +72,7 @@ export const crearLead = async (req, res) => {
                     </p>
                 `
             });
+            console.log(empresaMail);
 
 
             // =========================
@@ -80,7 +81,7 @@ export const crearLead = async (req, res) => {
 
             await resend.emails.send({
 
-                from: "NeuralOps <fibromagiaplus@gmail.com>",
+                from: "NeuralOps <onboarding@resend.dev>",
 
                 to: email,
 
@@ -102,6 +103,7 @@ export const crearLead = async (req, res) => {
                     </p>
                 `
             });
+            console.log(clienteMail);
 
             console.log("✅ MAILS ENVIADOS");
 
