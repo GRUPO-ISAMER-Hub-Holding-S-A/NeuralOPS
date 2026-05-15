@@ -41,24 +41,25 @@ export const crearLead = async (req, res) => {
         // =========================
 
 
-        console.log("EMAIL_USER:", process.env.EMAIL_USER);
-        console.log("EMAIL_PASS EXISTE:", !!process.env.EMAIL_PASS);
-
         try {
 
-            const transporter = nodemailer.createTransport({
+            const transporter =
+                nodemailer.createTransport({
 
-                host: "smtp.gmail.com",
+                    host: "smtp.gmail.com",
 
-                port: 465,
+                    port: 465,
 
-                secure: true,
+                    secure: true,
 
-                auth: {
-                    user: process.env.EMAIL_USER,
-                    pass: process.env.EMAIL_PASS
-                }
-            });
+                    auth: {
+                        user: process.env.EMAIL_USER,
+                        pass: process.env.EMAIL_PASS
+                    }
+                });
+
+            console.log("EMAIL_USER:", process.env.EMAIL_USER);
+            console.log("EMAIL_PASS EXISTE:", !!process.env.EMAIL_PASS);
 
             // MAIL INTERNO
             await transporter.sendMail({
