@@ -1,5 +1,7 @@
 import Lead from "../models/Lead.js";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 
 // 📩 CREAR LEAD
@@ -37,38 +39,15 @@ export const crearLead = async (req, res) => {
         console.log("✅ Lead guardado");
 
 
-
         // =========================
-        // ENVIAR MAIL
+        // ENVIAR MAIL EMPRESA
         // =========================
 
         try {
 
-            console.log("EMAIL_USER:", process.env.EMAIL_USER);
+            await resend.emails.send({
 
-            const transporter = nodemailer.createTransport({
-
-                service: "gmail",
-
-                auth: {
-                    user: process.env.EMAIL_USER,
-                    pass: process.env.EMAIL_PASS
-                },
-
-                tls: {
-                    rejectUnauthorized: false
-                }
-            });
-
-            await transporter.verify();
-
-            console.log("✅ SMTP conectado");
-
-
-            // MAIL EMPRESA
-            await transporter.sendMail({
-
-                from: `"NeuralOps" <${process.env.EMAIL_USER}>`,
+                from: "NeuralOps <onboarding@resend.dev>",
 
                 to: process.env.EMAIL_USER,
 
@@ -95,10 +74,13 @@ export const crearLead = async (req, res) => {
             });
 
 
+            // =========================
             // MAIL CLIENTE
-            await transporter.sendMail({
+            // =========================
 
-                from: `"NeuralOps" <${process.env.EMAIL_USER}>`,
+            await resend.emails.send({
+
+                from: "NeuralOps <onboarding@resend.dev>",
 
                 to: email,
 
@@ -125,7 +107,7 @@ export const crearLead = async (req, res) => {
 
         } catch (mailError) {
 
-            console.log("❌ ERROR MAIL COMPLETO:");
+            console.log("❌ ERROR RESEND:");
             console.log(mailError);
         }
 
