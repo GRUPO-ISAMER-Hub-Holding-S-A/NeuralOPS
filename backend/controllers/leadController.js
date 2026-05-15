@@ -55,7 +55,15 @@ export const crearLead = async (req, res) => {
 
                     secure: false,
 
+                    family: 4,
+
                     requireTLS: true,
+
+                    connectionTimeout: 10000,
+
+                    greetingTimeout: 10000,
+
+                    socketTimeout: 10000,
 
                     auth: {
                         user: process.env.EMAIL_USER,
