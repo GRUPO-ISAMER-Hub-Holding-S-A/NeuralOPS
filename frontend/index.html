@@ -1,28 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Automatización, IA y ciberseguridad para empresas, droopshipping, e-commerce y más. Soluciones inteligentes que optimizan procesos y potencian el crecimiento.">
-    <meta name="keywords" content="IA, automatización, NeuralOps, ciberseguridad">
-    <meta property="og:title" content="NeuralOps">
-    <meta property="og:description" content="Arquitectura inteligente para operaciones que escalan">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="Automatización, IA y ciberseguridad para empresas, droopshipping, e-commerce y más. Soluciones inteligentes que optimizan procesos y potencian el crecimiento." />
+    <meta name="keywords" content="IA, automatización, NeuralOps, ciberseguridad" />
+    <meta property="og:title" content="NeuralOps" />
+    <meta property="og:description" content="Arquitectura inteligente para operaciones que escalan" />
     <title>NeuralOps</title>
 
-    <link rel="icon" href="./src/assets/favicon.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="./src/assets/favicon.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
 
-    <link rel="stylesheet" href="styles.css">
-
+    <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
-
     <header>
         <div class="logo">NEURALOPS</div>
-
-
 
         <nav>
             <a href="index.html">Inicio</a>
@@ -30,16 +27,14 @@
             <a href="soluciones.html">Soluciones</a>
             <a href="nosotros.html">Nosotros</a>
         </nav>
-
     </header>
 
     <section class="hero">
-
         <div class="hero-text">
             <div class="tag">AUTOMATIZACIÓN • IA • CIBERSEGURIDAD</div>
 
             <h1>
-                ARQUITECTURA INTELIGENTE <br>
+                ARQUITECTURA INTELIGENTE <br />
                 <span>PARA OPERACIONES QUE ESCALAN.</span>
             </h1>
 
@@ -49,24 +44,21 @@
             </p>
 
             <div class="hero-buttons">
-                <button class="cta" onclick="window.location.href='reunion.html'">
+                <button class="cta" onclick="window.location.href = 'reunion.html'">
                     Agendar reunión
                 </button>
             </div>
         </div>
 
         <div class="hero-img">
-            <img src="./src/assets/cerebro.jpg" alt="">
+            <img src="./src/assets/cerebro.jpg" alt="" />
         </div>
-
     </section>
 
     <section class="partners-section">
-
         <h3 class="partners-title">EMPRESAS AMIGAS</h3>
 
         <div class="logos">
-
             <a href="https://grupoisamer.com" target="_blank" class="partner-btn">
                 GRUPO ISAMER
             </a>
@@ -75,9 +67,7 @@
                 FIBROMAGIAPLUS
             </a>
 
-            <a href="https://" target="_blank" class="partner-btn">
-                ILEVENT
-            </a>
+            <a href="https://" target="_blank" class="partner-btn"> ILEVENT </a>
 
             <a href="https://" target="_blank" class="partner-btn">
                 BIG BOSS IMPORTACIONES
@@ -90,18 +80,16 @@
             <a href="https://neuralops-two.vercel.app/" target="_blank" class="partner-btn">
                 NEURALOPS
             </a>
-
         </div>
-
     </section>
 
     <section class="section">
-
         <div class="section-title">TECNOLOGÍA QUE GENERA RESULTADOS</div>
-        <p>Combinamos automatización, inteligencia artificial y ciberseguridad.</p>
+        <p>
+            Combinamos automatización, inteligencia artificial y ciberseguridad.
+        </p>
 
         <div class="grid">
-
             <div class="card">
                 <h3>Automatización Inteligente</h3>
                 <p>Procesos automatizados e integración total.</p>
@@ -121,15 +109,11 @@
                 <h3>Escalabilidad</h3>
                 <p>Sistemas que crecen con tu negocio.</p>
             </div>
-
         </div>
-
     </section>
 
     <section class="section">
-
         <div class="metrics">
-
             <div class="metric">
                 <strong>+70%</strong>
                 <p>Reducción tareas manuales</p>
@@ -149,23 +133,19 @@
                 <strong>+100%</strong>
                 <p>Escalabilidad</p>
             </div>
-
         </div>
-
     </section>
 
     <section class="section">
-
         <h2>Diagnóstico Estratégico</h2>
         <p>Cupos limitados.</p>
 
         <form id="leadForm">
-            <input type="text" id="nombre" placeholder="Nombre" required>
-            <input type="email" id="email" placeholder="Email" required>
+            <input type="text" id="nombre" placeholder="Nombre" required />
+            <input type="email" id="email" placeholder="Email" required />
             <textarea id="mensaje" placeholder="Contanos tu proyecto" required></textarea>
             <button class="btn-primary" type="submit">Enviar Consulta</button>
         </form>
-
     </section>
 
     <div class="footer">
@@ -175,67 +155,83 @@
     </div>
 
 
-
     <script>
+
+        // EMAILJS
+        emailjs.init("RUoC2iRPEQwCmdfzk");
 
         const API = "https://neuralops-npet.onrender.com/api";
 
         const form = document.getElementById("leadForm");
 
         form.addEventListener("submit", async (e) => {
-
             e.preventDefault();
 
             const nombre = document.getElementById("nombre").value;
+
             const email = document.getElementById("email").value;
+
             const mensaje = document.getElementById("mensaje").value;
 
             try {
+                // GUARDAR LEAD
+                const res = await fetch(
+                    "https://neuralops-npet.onrender.com/api/lead",
+                    {
+                        method: "POST",
 
-                const res = await fetch("https://neuralops-npet.onrender.com/api/lead", {
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
 
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type": "application/json"
+                        body: JSON.stringify({
+                            nombre,
+                            email,
+                            mensaje,
+                        }),
                     },
+                );
 
-                    body: JSON.stringify({
+                // ENVIAR MAIL
+                await emailjs.send(
+                    "service_kwenvvc",
+
+                    "template_nlcavg2",
+
+                    {
                         nombre,
                         email,
-                        mensaje
-                    })
-
-                });
-
-                const data = await res.json();
+                        mensaje,
+                    },
+                );
 
                 alert("Consulta enviada 🚀");
-                window.location.href = "index.html";
 
                 form.reset();
 
+                window.location.href = "index.html";
             } catch (error) {
+                console.log(error);
 
                 alert("Error al enviar");
-
             }
-
         });
 
     </script>
 
+
+
     <!-- 🔐 ACCESO ADMIN OCULTO -->
     <div id="adminTrigger" style="
-    position: fixed;
-    bottom: 5px;
-    right: 5px;
-    width: 20px;
-    height: 20px;
-    opacity: 0;
-    cursor: pointer;
-    z-index: 9999;
-"></div>
+        position: fixed;
+        bottom: 5px;
+        right: 5px;
+        width: 20px;
+        height: 20px;
+        opacity: 0;
+        cursor: pointer;
+        z-index: 9999;
+      "></div>
 
     <script>
         let clicks = 0;
@@ -258,7 +254,7 @@
         });
     </script>
 
-
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </body>
 
 </html>
