@@ -119,12 +119,12 @@ export async function crearEventoGoogle({
                 `Cliente: ${email}`,
 
             start: {
-                dateTime: inicio.toISOString(),
+                dateTime: inicio.format("YYYY-MM-DDTHH:mm:ss"),
                 timeZone: "America/Argentina/Buenos_Aires"
             },
 
             end: {
-                dateTime: fin.toISOString(),
+                dateTime: fin.format("YYYY-MM-DDTHH:mm:ss"),
                 timeZone: "America/Argentina/Buenos_Aires"
             }
         };
