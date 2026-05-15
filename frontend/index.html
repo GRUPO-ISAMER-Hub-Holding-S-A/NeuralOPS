@@ -155,45 +155,62 @@
     </div>
 
 
-    <script>
+<script>
 
-        // EMAILJS
-        emailjs.init("RUoC2iRPEQwCmdfzk");
+    emailjs.init("RUoC2iRPEQwCmdfzk");
 
-        const API = "https://neuralops-npet.onrender.com/api";
 
-        const form = document.getElementById("leadForm");
+    const API = "https://neuralops-npet.onrender.com/api";
 
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
+    const form = document.getElementById("leadForm");
 
-            const nombre = document.getElementById("nombre").value;
 
-            const email = document.getElementById("email").value;
+    form.addEventListener("submit", async (e) => {
 
-            const mensaje = document.getElementById("mensaje").value;
+        e.preventDefault();
+
+        const nombre =
+            document.getElementById("nombre").value;
+
+        const email =
+            document.getElementById("email").value;
+
+        const mensaje =
+            document.getElementById("mensaje").value;
+
+        try {
+
+            // =========================
+            // GUARDAR LEAD
+            // =========================
+
+            const res = await fetch(
+                "https://neuralops-npet.onrender.com/api/lead",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        nombre,
+                        email,
+                        mensaje
+                    })
+                }
+            );
+
+
+            // =========================
+            // EMAILJS
+            // =========================
 
             try {
-                // GUARDAR LEAD
-                const res = await fetch(
-                    "https://neuralops-npet.onrender.com/api/lead",
-                    {
-                        method: "POST",
 
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-
-                        body: JSON.stringify({
-                            nombre,
-                            email,
-                            mensaje,
-                        }),
-                    },
-                );
-
-                // ENVIAR MAIL
                 await emailjs.send(
+
                     "service_kwenvvc",
 
                     "template_nlcavg2",
@@ -201,23 +218,40 @@
                     {
                         nombre,
                         email,
-                        mensaje,
-                    },
+                        mensaje
+                    }
                 );
 
-                alert("Consulta enviada 🚀");
+                console.log("✅ Mail enviado");
 
-                form.reset();
+            } catch (mailError) {
 
-                window.location.href = "index.html";
-            } catch (error) {
-                console.log(error);
-
-                alert("Error al enviar");
+                console.log("❌ Error EmailJS");
+                console.log(mailError);
             }
-        });
 
-    </script>
+
+            // =========================
+            // OK
+            // =========================
+
+            alert("Consulta enviada 🚀");
+
+            form.reset();
+
+            window.location.href = "index.html";
+
+
+        } catch (error) {
+
+            console.log(error);
+
+            alert("Error al guardar lead");
+        }
+
+    });
+
+</script>
 
 
 
