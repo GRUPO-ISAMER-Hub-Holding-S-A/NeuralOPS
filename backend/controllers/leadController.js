@@ -48,9 +48,11 @@ export const crearLead = async (req, res) => {
 
                     host: "smtp.gmail.com",
 
-                    port: 465,
+                    port: 587,
 
-                    secure: true,
+                    secure: false,
+
+                    requireTLS: true,
 
                     auth: {
                         user: process.env.EMAIL_USER,
