@@ -54,6 +54,8 @@ export const crearLead = async (req, res) => {
 
                     requireTLS: true,
 
+                    family: 4,
+
                     auth: {
                         user: process.env.EMAIL_USER,
                         pass: process.env.EMAIL_PASS
