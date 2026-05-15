@@ -46,34 +46,23 @@ export const crearLead = async (req, res) => {
 
             console.log("EMAIL_USER:", process.env.EMAIL_USER);
 
-            const transporter =
-                nodemailer.createTransport({
+            const transporter = nodemailer.createTransport({
 
-                    host: "smtp.gmail.com",
+                service: "gmail",
 
-                    port: 587,
+                auth: {
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_PASS
+                },
 
-                    secure: false,
+                tls: {
+                    rejectUnauthorized: false
+                }
+            });
 
-                    family: 4,
+            await transporter.verify();
 
-                    requireTLS: true,
-
-                    connectionTimeout: 10000,
-
-                    greetingTimeout: 10000,
-
-                    socketTimeout: 10000,
-
-                    auth: {
-                        user: process.env.EMAIL_USER,
-                        pass: process.env.EMAIL_PASS
-                    },
-
-                    tls: {
-                        rejectUnauthorized: false
-                    }
-                });
+            console.log("✅ SMTP conectado");
 
 
             // MAIL EMPRESA
