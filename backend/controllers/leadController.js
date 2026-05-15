@@ -40,18 +40,25 @@ export const crearLead = async (req, res) => {
         // 📧 MAILS
         // =========================
 
+
+        console.log("EMAIL_USER:", process.env.EMAIL_USER);
+        console.log("EMAIL_PASS EXISTE:", !!process.env.EMAIL_PASS);
+
         try {
 
-            const transporter =
-                nodemailer.createTransport({
+            const transporter = nodemailer.createTransport({
 
-                    service: "gmail",
+                host: "smtp.gmail.com",
 
-                    auth: {
-                        user: process.env.EMAIL_USER,
-                        pass: process.env.EMAIL_PASS
-                    }
-                });
+                port: 465,
+
+                secure: true,
+
+                auth: {
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_PASS
+                }
+            });
 
             // MAIL INTERNO
             await transporter.sendMail({
@@ -111,15 +118,15 @@ export const crearLead = async (req, res) => {
 
             console.log("✅ Mails enviados");
 
-} catch (mailError) {
+        } catch (mailError) {
 
-    console.log("❌ ERROR MAIL COMPLETO:");
-    console.log(mailError);
+            console.log("❌ ERROR MAIL COMPLETO:");
+            console.log(mailError);
 
-    return res.status(500).json({
-        error: "Error enviando mail"
-    });
-}
+            return res.status(500).json({
+                error: "Error enviando mail"
+            });
+        }
 
         // RESPUESTA OK
         res.json({
