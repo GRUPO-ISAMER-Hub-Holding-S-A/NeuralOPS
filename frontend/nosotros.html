@@ -4,22 +4,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <title>Nosotros | NeuralOps</title>
+    <link rel="icon" href="./src/assets/cerebro.png" />
 
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-    <header>
-        <div class="logo">NEURALOPS</div>
+    
+    <div id="cur"></div>
+    <div id="cur-ring"></div>
 
-        <nav>
-            <a href="index.html">Inicio</a>
-            <a href="servicios.html">Servicios</a>
-            <a href="soluciones.html">Soluciones</a>
-            <a href="nosotros.html">Nosotros</a>
-        </nav>
+
+    <header>
+    <!-- NAV -->
+    <nav>
+        <a href="#" class="nav-logo">
+            <span class="nav-logo-dot"></span>NeuralOps
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="Servicios.html">Servicios</a></li>
+            <li><a href="soluciones.html">Soluciones</a></li>
+            <li><a href="nosotros.html">Nosotros</a></li>
+        </ul>
+
+        <div id="adminLink"></div>
+
+        <div class="nav-right"></div>
+    </nav>
     </header>
 
     <section class="section">
@@ -51,6 +69,21 @@
     <a href="terminos.html">Términos y condiciones</a>
 </div>
 
+
+
+
+    <script>
+        // Cursor
+        const cur = document.getElementById('cur');
+        const ring = document.getElementById('cur-ring');
+        let mx = 0, my = 0, rx = 0, ry = 0;
+        document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cur.style.left = mx + 'px'; cur.style.top = my + 'px'; });
+        (function anim() { rx += (mx - rx) * .11; ry += (my - ry) * .11; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(anim); })();
+        document.querySelectorAll('a,button,.prod-card,.cat-card,.why-card,.payment-card').forEach(el => {
+            el.addEventListener('mouseenter', () => { cur.style.width = '18px'; cur.style.height = '18px'; ring.style.width = '50px'; ring.style.height = '50px'; ring.style.borderColor = 'rgba(0,217,255,.4)'; });
+            el.addEventListener('mouseleave', () => { cur.style.width = '10px'; cur.style.height = '10px'; ring.style.width = '36px'; ring.style.height = '36px'; ring.style.borderColor = 'rgba(0,217,255,.3)'; });
+        });
+        </script>
 
 </body>
 
