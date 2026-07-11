@@ -24,37 +24,37 @@
 
 <body>
 
-    
+
     <div id="cur"></div>
     <div id="cur-ring"></div>
 
 
     <header>
-    <!-- NAV -->
-    <nav>
-        <a href="index.html" class="nav-logo">
-            <span class="nav-logo-dot"></span>NeuralOps
-        </a>
+        <!-- NAV -->
+        <nav>
+            <a href="index.html" class="nav-logo">
+                <span class="nav-logo-dot"></span>NeuralOps
+            </a>
 
 
-                    <button id="menuToggle" class="menu-toggle">
+            <button id="menuToggle" class="menu-toggle">
 
                 ☰
 
             </button>
 
 
-        <ul class="nav-links">
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="servicios.html">Servicios</a></li>
-            <li><a href="soluciones.html">Soluciones</a></li>
-            <li><a href="nosotros.html">Nosotros</a></li>
-        </ul>
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="soluciones.html">Soluciones</a></li>
+                <li><a href="nosotros.html">Nosotros</a></li>
+            </ul>
 
-        <div id="adminLink"></div>
+            <div id="adminLink"></div>
 
-        <div class="nav-right"></div>
-    </nav>
+            <div class="nav-right"></div>
+        </nav>
     </header>
 
     <section class="section">
@@ -68,7 +68,8 @@
         </p>
 
         <p>
-            Creamos soluciones tecnológicas escalables para empresas modernas que buscan crecer más rápido, reducir costos y optimizar operaciones.
+            Creamos soluciones tecnológicas escalables para empresas modernas que buscan crecer más rápido, reducir
+            costos y optimizar operaciones.
         </p>
 
         <p>
@@ -80,11 +81,11 @@
 
 
 
-<div class="footer">
-    © 2026 NeuralOps |
-    <a href="privacidad.html">Política de privacidad</a> |
-    <a href="terminos.html">Términos y condiciones</a>
-</div>
+    <div class="footer">
+        © 2026 NeuralOps |
+        <a href="privacidad.html">Política de privacidad</a> |
+        <a href="terminos.html">Términos y condiciones</a>
+    </div>
 
 
 
@@ -100,7 +101,33 @@
             el.addEventListener('mouseenter', () => { cur.style.width = '18px'; cur.style.height = '18px'; ring.style.width = '50px'; ring.style.height = '50px'; ring.style.borderColor = 'rgba(0,217,255,.4)'; });
             el.addEventListener('mouseleave', () => { cur.style.width = '10px'; cur.style.height = '10px'; ring.style.width = '36px'; ring.style.height = '36px'; ring.style.borderColor = 'rgba(0,217,255,.3)'; });
         });
-        </script>
+    </script>
+
+
+    <script>
+
+        const menuToggle = document.getElementById("menuToggle");
+
+        const navLinks = document.querySelector(".nav-links");
+
+        menuToggle.addEventListener("click", () => {
+
+            navLinks.classList.toggle("active");
+
+        });
+
+        document.querySelectorAll(".nav-links a").forEach(link => {
+
+            link.addEventListener("click", () => {
+
+                navLinks.classList.remove("active");
+
+            });
+
+        });
+
+    </script>
+
 
 </body>
 

@@ -17,7 +17,8 @@
         href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
     <link rel="stylesheet" href="styles.css" />
 </head>
@@ -222,14 +223,43 @@
 
                 const data = await res.json();
 
-                alert("Consulta enviada 🚀");
-                window.location.href = "index.html";
+                Toastify({
+                    text: "✅ Consulta enviada correctamente",
+                    duration: 3500,
+                    gravity: "top",
+                    position: "right",
+                    close: true,
+                    stopOnFocus: true,
+                    style: {
+                        background: "linear-gradient(135deg,#00d9ff,#0066ff)",
+                        borderRadius: "12px",
+                        boxShadow: "0 15px 40px rgba(0,217,255,.35)",
+                        fontFamily: "Space Grotesk"
+                    }
+                }).showToast();
+
+                form.reset();
+
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 1800);
 
                 form.reset();
 
             } catch (error) {
 
-                alert("Error al enviar");
+                Toastify({
+                    text: "❌ Ocurrió un error al enviar la consulta",
+                    duration: 4000,
+                    gravity: "top",
+                    position: "right",
+                    close: true,
+                    style: {
+                        background: "#ff3b3b",
+                        borderRadius: "12px",
+                        fontFamily: "Space Grotesk"
+                    }
+                }).showToast();
 
             }
 
@@ -286,6 +316,32 @@
             }
         });
     </script>
+
+
+    <script>
+
+        const menuToggle = document.getElementById("menuToggle");
+
+        const navLinks = document.querySelector(".nav-links");
+
+        menuToggle.addEventListener("click", () => {
+
+            navLinks.classList.toggle("active");
+
+        });
+
+        document.querySelectorAll(".nav-links a").forEach(link => {
+
+            link.addEventListener("click", () => {
+
+                navLinks.classList.remove("active");
+
+            });
+
+        });
+
+    </script>
+
 
 </body>
 

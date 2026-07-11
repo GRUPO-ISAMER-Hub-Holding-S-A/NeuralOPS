@@ -4,12 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link
+    <link
         href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <title>Agendar reunión | NeuralOps</title>
     <link rel="icon" href="./src/assets/cerebro.png" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
     <link rel="stylesheet" href="styles.css">
 
@@ -77,7 +79,7 @@
 
 
 
-    
+
     <div id="cur"></div>
     <div id="cur-ring"></div>
 
@@ -186,8 +188,24 @@
                 return;
             }
 
-            alert("✅ Reunión agendada correctamente");
-            window.location.href = "index.html";
+            Toastify({
+                text: "📅 Reunión agendada correctamente",
+                duration: 2500,
+                gravity: "top",
+                position: "right",
+                close: true,
+                stopOnFocus: true,
+                style: {
+                    background: "linear-gradient(135deg,#00d9ff,#0066ff)",
+                    borderRadius: "12px",
+                    boxShadow: "0 15px 40px rgba(0,217,255,.35)",
+                    fontFamily: "Space Grotesk"
+                }
+            }).showToast();
+
+            form.reset();
+
+
         }
 
     </script>
@@ -204,7 +222,33 @@
             el.addEventListener('mouseenter', () => { cur.style.width = '18px'; cur.style.height = '18px'; ring.style.width = '50px'; ring.style.height = '50px'; ring.style.borderColor = 'rgba(0,217,255,.4)'; });
             el.addEventListener('mouseleave', () => { cur.style.width = '10px'; cur.style.height = '10px'; ring.style.width = '36px'; ring.style.height = '36px'; ring.style.borderColor = 'rgba(0,217,255,.3)'; });
         });
-        </script>
+    </script>
+
+
+    <script>
+
+        const menuToggle = document.getElementById("menuToggle");
+
+        const navLinks = document.querySelector(".nav-links");
+
+        menuToggle.addEventListener("click", () => {
+
+            navLinks.classList.toggle("active");
+
+        });
+
+        document.querySelectorAll(".nav-links a").forEach(link => {
+
+            link.addEventListener("click", () => {
+
+                navLinks.classList.remove("active");
+
+            });
+
+        });
+
+    </script>
+
 
 </body>
 

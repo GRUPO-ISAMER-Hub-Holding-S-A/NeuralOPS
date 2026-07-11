@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,6 +17,8 @@
         href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
     <link rel="stylesheet" href="styles.css" />
 
@@ -193,7 +196,18 @@
             const data = await res.json();
 
             if (!res.ok) {
-                alert(data.error || "Error login");
+                Toastify({
+                    text: data.error || "❌ Usuario o contraseña incorrectos",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    close: true,
+                    style: {
+                        background: "#ff3b3b",
+                        borderRadius: "12px",
+                        fontFamily: "Space Grotesk"
+                    }
+                }).showToast();
                 return;
             }
 
@@ -241,7 +255,18 @@
 
             if (res.status === 401 || res.status === 403) {
 
-                alert("Sesión expirada");
+                Toastify({
+                    text: "⚠️ La sesión expiró. Iniciá sesión nuevamente.",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    close: true,
+                    style: {
+                        background: "#ff9800",
+                        borderRadius: "12px",
+                        fontFamily: "Space Grotesk"
+                    }
+                }).showToast();
 
                 logout();
 
@@ -375,12 +400,33 @@
 
             if (!res.ok) {
 
-                alert(data.error || "Error al guardar");
+                Toastify({
+                    text: data.error || "❌ Error al guardar",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    close: true,
+                    style: {
+                        background: "#ff3b3b",
+                        borderRadius: "12px",
+                        fontFamily: "Space Grotesk"
+                    }
+                }).showToast();
 
                 return;
             }
 
-            alert("Estado actualizado");
+            Toastify({
+                text: "✅ Estado actualizado",
+                duration: 2500,
+                gravity: "top",
+                position: "right",
+                style: {
+                    background: "linear-gradient(135deg,#00d9ff,#0066ff)",
+                    borderRadius: "12px",
+                    fontFamily: "Space Grotesk"
+                }
+            }).showToast();
         }
 
         // ELIMINAR
@@ -405,12 +451,34 @@
 
             if (!res.ok) {
 
-                alert(data.error || "Error eliminando");
+                Toastify({
+                    text: data.error || "❌ Error eliminando",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    close: true,
+                    style: {
+                        background: "#ff3b3b",
+                        borderRadius: "12px",
+                        fontFamily: "Space Grotesk"
+                    }
+                }).showToast();
 
                 return;
             }
 
-            alert("Lead eliminado");
+            Toastify({
+                text: "🗑️ Lead eliminado correctamente",
+                duration: 2500,
+                gravity: "top",
+                position: "right",
+                close: true,
+                style: {
+                    background: "#555",
+                    borderRadius: "12px",
+                    fontFamily: "Space Grotesk"
+                }
+            }).showToast();
 
             cargarLeads();
         }
@@ -431,7 +499,7 @@
 
     </script>
 
-        <script>
+    <script>
         // Cursor
         const cur = document.getElementById('cur');
         const ring = document.getElementById('cur-ring');
@@ -442,7 +510,33 @@
             el.addEventListener('mouseenter', () => { cur.style.width = '18px'; cur.style.height = '18px'; ring.style.width = '50px'; ring.style.height = '50px'; ring.style.borderColor = 'rgba(0,217,255,.4)'; });
             el.addEventListener('mouseleave', () => { cur.style.width = '10px'; cur.style.height = '10px'; ring.style.width = '36px'; ring.style.height = '36px'; ring.style.borderColor = 'rgba(0,217,255,.3)'; });
         });
-        </script>
+    </script>
+
+
+    <script>
+
+        const menuToggle = document.getElementById("menuToggle");
+
+        const navLinks = document.querySelector(".nav-links");
+
+        menuToggle.addEventListener("click", () => {
+
+            navLinks.classList.toggle("active");
+
+        });
+
+        document.querySelectorAll(".nav-links a").forEach(link => {
+
+            link.addEventListener("click", () => {
+
+                navLinks.classList.remove("active");
+
+            });
+
+        });
+
+    </script>
+
 
 </body>
 
