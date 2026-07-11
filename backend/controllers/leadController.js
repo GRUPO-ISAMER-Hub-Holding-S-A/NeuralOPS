@@ -5,7 +5,7 @@ import transporter from "../config/mailer.js";
 // 📩 CREAR LEAD
 export const crearLead = async (req, res) => {
 
-    
+
     try {
 
         const {
@@ -47,87 +47,81 @@ export const crearLead = async (req, res) => {
 
         try {
 
-            console.log("EMAIL_USER:", process.env.EMAIL_USER);
+            console.log("Enviando mails con Resend...");
 
-            await transporter.verify();
-
-            console.log("✅ SMTP conectado");
-
-
-            // ---------------------
+            // ==========================
             // MAIL EMPRESA
-            // ---------------------
+            // ==========================
 
-            const empresaMail = await transporter.sendMail({
+            const empresaMail = await transporter.emails.send({
 
-                from: `"NeuralOps" <${process.env.EMAIL_USER}>`,
+                from: "NeuralOps <onboarding@resend.dev>",
 
                 to: process.env.EMAIL_USER,
 
                 subject: "Nuevo Lead NeuralOps 🚀",
 
                 html: `
-                    <h2>Nuevo Lead</h2>
+            <h2>Nuevo Lead</h2>
 
-                    <p><strong>Nombre:</strong> ${nombre}</p>
+            <p><strong>Nombre:</strong> ${nombre}</p>
 
-                    <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Email:</strong> ${email}</p>
 
-                    <p><strong>Mensaje:</strong></p>
+            <p><strong>Mensaje:</strong></p>
 
-                    <p>${mensaje}</p>
-                `
+            <p>${mensaje}</p>
+        `
             });
 
             console.log("✅ Mail empresa enviado");
-            console.log(empresaMail.messageId);
+            console.log(empresaMail);
 
-
-            // ---------------------
+            // ==========================
             // MAIL CLIENTE
-            // ---------------------
+            // ==========================
 
-            const clienteMail = await transporter.sendMail({
+            const clienteMail = await transporter.emails.send({
 
-                from: `"NeuralOps" <${process.env.EMAIL_USER}>`,
+                from: "NeuralOps <onboarding@resend.dev>",
 
                 to: email,
 
                 subject: "Recibimos tu consulta 🚀",
 
                 html: `
-                    <h2>Hola ${nombre}</h2>
+            <h2>Hola ${nombre}</h2>
 
-                    <p>
-                        Gracias por comunicarte con NeuralOps.
-                    </p>
+            <p>
+                Gracias por comunicarte con NeuralOps.
+            </p>
 
-                    <p>
-                        Recibimos correctamente tu consulta y un asesor se pondrá
-                        en contacto con vos a la brevedad.
-                    </p>
+            <p>
+                Recibimos correctamente tu consulta y un asesor se pondrá
+                en contacto con vos a la brevedad.
+            </p>
 
-                    <hr>
+            <hr>
 
-                    <b>Resumen de tu consulta:</b>
+            <b>Resumen de tu consulta:</b>
 
-                    <p>${mensaje}</p>
+            <p>${mensaje}</p>
 
-                    <br>
+            <br>
 
-                    Equipo NeuralOps 🚀
-                `
+            Equipo NeuralOps 🚀
+        `
             });
 
             console.log("✅ Mail cliente enviado");
-            console.log(clienteMail.messageId);
+            console.log(clienteMail);
 
         }
 
         catch (mailError) {
 
-            console.log("❌ ERROR MAIL COMPLETO:");
             console.log(mailError);
+
         }
 
 
