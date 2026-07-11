@@ -60,6 +60,18 @@ body::before {
     mix-blend-mode: multiply;
 }
 
+
+.section-title {
+
+    margin-top:35px;
+
+    margin-bottom:15px;
+
+    color:#00D9FF;
+
+}
+
+
 /* CURSOR */
 #cur {
     position: fixed;
@@ -476,6 +488,65 @@ EMPRESAS AMIGAS
 }
 
 
+/*article terminos y privacidad*/
+
+.article{
+
+    width:100%;
+
+    max-width:900px;
+
+    margin:120px auto 80px;
+
+    padding:0 25px;
+
+}
+
+.article-title{
+
+    text-align:center;
+
+    font-size:38px;
+
+    font-weight:700;
+
+    margin-bottom:45px;
+
+}
+
+.article h3{
+
+    margin-top:35px;
+
+    margin-bottom:15px;
+
+    color:#00D9FF;
+
+}
+
+.article p{
+
+    margin-bottom:18px;
+
+    color:#E5E7EB;
+
+    line-height:1.8;
+
+}
+
+.article ul{
+
+    margin:20px 0 25px 30px;
+
+}
+
+.article li{
+
+    margin-bottom:10px;
+
+}
+
+
 /* CARDS */
 
 .grid {
@@ -598,21 +669,259 @@ textarea {
 }
 
 
-/* RESPONSIVE */
+/*hamburguesa*/
 
-@media(max-width:900px) {
+.menu-toggle{
 
-    .hero {
-        flex-direction: column;
-        text-align: center;
+display:none;
+
+background:none;
+
+border:none;
+
+color:white;
+
+font-size:30px;
+
+cursor:pointer;
+
+}
+
+
+/* ==========================================================
+RESPONSIVE OFICIAL
+========================================================== */
+
+@media (max-width: 768px) {
+
+    html{
+        font-size:15px;
     }
 
-    .hero-img img {
-        width: 300px;
+    body{
+        cursor:auto;
+        overflow-x:hidden;
     }
 
-    header {
-        padding: 20px;
+    #cur,
+    #cur-ring{
+        display:none;
+    }
+
+    /* ===========================
+    NAVBAR
+    =========================== */
+
+    nav{
+        height:70px;
+        padding:0 15px;
+
+        display:grid;
+        grid-template-columns:1fr auto auto;
+        align-items:center;
+
+        position:fixed;
+        top:0;
+        left:0;
+        right:0;
+        z-index:9999;
+    }
+
+    .nav-logo{
+        font-size:17px;
+        white-space:nowrap;
+    }
+
+    .menu-toggle{
+        display:block;
+        background:none;
+        border:none;
+        color:white;
+        font-size:34px;
+        cursor:pointer;
+        justify-self:center;
+    }
+
+    .nav-right{
+
+        position:fixed;
+
+        top:70px;
+
+        left:0;
+
+        width:100%;
+
+        background:#050507;
+
+        display:flex;
+
+        flex-direction:column;
+
+        align-items:center;
+
+        gap:15px;
+
+        padding:20px;
+
+        transform:translateY(-150%);
+
+        transition:.35s;
+
+        border-bottom:1px solid rgba(255,255,255,.08);
+
+        z-index:9998;
+
+    }
+
+    .nav-right.open{
+
+        transform:translateY(0);
+
+    }
+
+    .nav-pill{
+
+        width:100%;
+
+        max-width:280px;
+
+        margin:0;
+
+        justify-content:center;
+
+    }
+
+
+    /* ===========================
+    HERO
+    =========================== */
+
+    .hero{
+
+        padding-top:95px;
+
+        min-height:auto;
+
+        flex-direction:column;
+
+        text-align:center;
+
+        padding-inline:15px;
+
+    }
+
+    .hero img{
+
+        width:100%;
+
+        max-width:330px;
+
+        margin:auto;
+
+    }
+
+    h1{
+
+        font-size:30px;
+
+    }
+
+    h2{
+
+        font-size:23px;
+
+    }
+
+    /* ===========================
+    CONTAINER
+    =========================== */
+
+    .container{
+
+        width:100%;
+
+        padding:15px;
+
+    }
+
+
+
+    /* ===========================
+    FOOTER
+    =========================== */
+
+    .footer{
+
+        padding:30px 15px;
+
+        text-align:center;
+
+    }
+
+    .footer-links{
+
+        display:flex;
+
+        flex-direction:column;
+
+        gap:10px;
+
+    }
+
+    /* ===========================
+    ADMIN
+    =========================== */
+
+    .panel{
+
+        overflow-x:auto;
+
+    }
+
+    .panel table{
+
+        min-width:1000px;
+
+    }
+
+}
+
+
+/* ==========================================================
+MÓVILES MUY pequot's
+========================================================== */
+
+@media (max-width:480px){
+
+    html{
+
+        font-size:14px;
+
+    }
+
+    h1{
+
+        font-size:26px;
+
+    }
+
+    .hero{
+
+        padding-top:90px;
+
+    }
+
+    .nav-logo{
+
+        font-size:15px;
+
+    }
+
+    .menu-toggle{
+
+        font-size:30px;
+
     }
 
 }

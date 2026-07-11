@@ -1,7 +1,5 @@
 import Lead from "../models/Lead.js";
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import transporter from "../config/mailer.js";
 
 
 // 📩 CREAR LEAD
@@ -39,49 +37,58 @@ export const crearLead = async (req, res) => {
         console.log("✅ Lead guardado");
 
 
+
+
+
         // =========================
-        // ENVIAR MAIL EMPRESA
+        // ENVIAR MAILS
         // =========================
 
         try {
 
-            await resend.emails.send({
+            console.log("EMAIL_USER:", process.env.EMAIL_USER);
 
-                from: "NeuralOps <onboarding@resend.dev>",
+            await transporter.verify();
+
+            console.log("✅ SMTP conectado");
+
+
+            // ---------------------
+            // MAIL EMPRESA
+            // ---------------------
+
+            const empresaMail = await transporter.sendMail({
+
+                from: `"NeuralOps" <${process.env.EMAIL_USER}>`,
 
                 to: process.env.EMAIL_USER,
 
-                subject: "Nuevo lead NeuralOps 🚀",
+                subject: "Nuevo Lead NeuralOps 🚀",
 
                 html: `
                     <h2>Nuevo Lead</h2>
 
-                    <p>
-                        <strong>Nombre:</strong>
-                        ${nombre}
-                    </p>
+                    <p><strong>Nombre:</strong> ${nombre}</p>
 
-                    <p>
-                        <strong>Email:</strong>
-                        ${email}
-                    </p>
+                    <p><strong>Email:</strong> ${email}</p>
 
-                    <p>
-                        <strong>Mensaje:</strong>
-                        ${mensaje}
-                    </p>
+                    <p><strong>Mensaje:</strong></p>
+
+                    <p>${mensaje}</p>
                 `
             });
-            console.log(empresaMail);
+
+            console.log("✅ Mail empresa enviado");
+            console.log(empresaMail.messageId);
 
 
-            // =========================
+            // ---------------------
             // MAIL CLIENTE
-            // =========================
+            // ---------------------
 
-            await resend.emails.send({
+            const clienteMail = await transporter.sendMail({
 
-                from: "NeuralOps <onboarding@resend.dev>",
+                from: `"NeuralOps" <${process.env.EMAIL_USER}>`,
 
                 to: email,
 
@@ -91,47 +98,65 @@ export const crearLead = async (req, res) => {
                     <h2>Hola ${nombre}</h2>
 
                     <p>
-                        Recibimos tu consulta correctamente.
+                        Gracias por comunicarte con NeuralOps.
                     </p>
 
                     <p>
-                        En breve nos contactaremos con vos.
+                        Recibimos correctamente tu consulta y un asesor se pondrá
+                        en contacto con vos a la brevedad.
                     </p>
 
-                    <p>
-                        Equipo NeuralOps 🚀
-                    </p>
+                    <hr>
+
+                    <b>Resumen de tu consulta:</b>
+
+                    <p>${mensaje}</p>
+
+                    <br>
+
+                    Equipo NeuralOps 🚀
                 `
             });
-            console.log(clienteMail);
 
-            console.log("✅ MAILS ENVIADOS");
+            console.log("✅ Mail cliente enviado");
+            console.log(clienteMail.messageId);
 
-        } catch (mailError) {
+        }
 
-            console.log("❌ ERROR RESEND:");
+        catch (mailError) {
+
+            console.log("❌ ERROR MAIL COMPLETO:");
             console.log(mailError);
         }
 
 
         // =========================
-        // RESPUESTA OK
+        // RESPUESTA
         // =========================
 
         res.json({
+
             ok: true,
+
             message: "Lead guardado correctamente"
+
         });
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.log("❌ ERROR GENERAL:");
         console.log(error);
 
         res.status(500).json({
+
             error: "Error del servidor"
+
         });
+
     }
+
 };
 
 
@@ -156,7 +181,9 @@ export const eliminarLead = async (req, res) => {
             message: "Lead eliminado correctamente"
         });
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.log("❌ ERROR ELIMINAR:");
         console.log(error);
@@ -164,7 +191,9 @@ export const eliminarLead = async (req, res) => {
         res.status(500).json({
             error: "Error al eliminar lead"
         });
+
     }
+
 };
 
 
@@ -185,6 +214,7 @@ export const actualizarEstado = async (req, res) => {
                 { estado },
 
                 { new: true }
+
             );
 
         if (!actualizado) {
@@ -196,7 +226,9 @@ export const actualizarEstado = async (req, res) => {
 
         res.json(actualizado);
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.log("❌ ERROR ACTUALIZAR:");
         console.log(error);
@@ -204,5 +236,7 @@ export const actualizarEstado = async (req, res) => {
         res.status(500).json({
             error: "Error al actualizar"
         });
+
     }
+
 };
