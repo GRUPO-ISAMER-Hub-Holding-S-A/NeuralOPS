@@ -1,5 +1,6 @@
 import Lead from "../models/Lead.js";
 import transporter from "../config/mailer.js";
+import { Resend } from "resend";
 
 
 // 📩 CREAR LEAD

@@ -27,6 +27,27 @@ export const horariosDisponibles = async (req, res) => {
 };
 
 
+// Dupliucado de horarios
+const existe = await Reunion.findOne({
+
+    fecha,
+
+    hora
+
+});
+
+if (existe) {
+
+    return res.status(409).json({
+
+        error: "Ese horario ya está reservado."
+
+    });
+
+}
+
+
+
 // 📅 CREAR REUNION
 export const crearReunion = async (req, res) => {
 
