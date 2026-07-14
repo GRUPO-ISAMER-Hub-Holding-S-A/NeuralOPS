@@ -69,7 +69,7 @@ export async function obtenerHorariosDisponibles(fecha) {
             dayjs(e.start.dateTime).format("HH:mm")
         );
 
-        const horariosTrabajo = [
+        const horarios = [
             "09:00",
             "10:00",
             "11:00",
