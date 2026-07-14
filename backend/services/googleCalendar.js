@@ -80,7 +80,7 @@ export async function obtenerHorariosDisponibles(fecha) {
             "18:00"
         ];
 
-        for (const hora of horariosTrabajo) {
+        for (const hora of horarios) {
 
             if (!ocupados.includes(hora)) {
 
