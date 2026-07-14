@@ -129,7 +129,7 @@
 
     <script>
 
-        const API = "https://neuralops-npet.onrender.com/api";
+        const API = "https://neuralops-u805.onrender.com/api";
 
         let leadsGlobal = [];
 
@@ -143,7 +143,7 @@
             try {
 
                 const res = await fetch(
-                    "https://neuralops-npet.onrender.com/api/leads",
+                    "https://neuralops-u805.onrender.com/api/leads",
                     {
                         headers: {
                             "Authorization": `Bearer ${token}`
@@ -178,7 +178,7 @@
             const user = document.getElementById("user").value;
             const pass = document.getElementById("pass").value;
 
-            const res = await fetch("https://neuralops-npet.onrender.com/api/login", {
+            const res = await fetch("https://neuralops-u805.onrender.com/api/login", {
 
                 method: "POST",
 
@@ -245,7 +245,7 @@
             const token = localStorage.getItem("token");
 
             const res = await fetch(
-                "https://neuralops-npet.onrender.com/api/leads",
+                "https://neuralops-u805.onrender.com/api/leads",
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`
@@ -381,7 +381,7 @@
                 document.getElementById(`estado-${id}`).value;
 
             const res = await fetch(
-                `https://neuralops-npet.onrender.com/api/lead/${id}`,
+                `https://neuralops-u805.onrender.com/api/lead/${id}`,
                 {
                     method: "PUT",
 
@@ -437,7 +437,7 @@
             const token = localStorage.getItem("token");
 
             const res = await fetch(
-                `https://neuralops-npet.onrender.com/api/lead/${id}`,
+                `https://neuralops-u805.onrender.com/api/lead/${id}`,
                 {
                     method: "DELETE",
 
