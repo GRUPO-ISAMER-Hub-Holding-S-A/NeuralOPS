@@ -112,7 +112,7 @@
 
     <script>
 
-        const API = "http://localhost:4000/api";
+        const API = "https://neuralops-npet.onrender.com/api";
 
         const fechaInput =
             document.getElementById("fecha");
@@ -133,8 +133,8 @@
                 document.getElementById("fecha").value;
 
             const res = await fetch(
-`${API}/horarios?fecha=${fecha}`
-);
+                `https://neuralops-npet.onrender.com/api/horarios?fecha=${fecha}`
+            );
 
             const horarios = await res.json();
 
@@ -179,9 +179,9 @@
                 const hora =
                     document.getElementById("horarios").value;
 
-               const res = await fetch(
+                const res = await fetch(
 
-`${API}/reunion`,
+                    "https://neuralops-npet.onrender.com/api/reunion",
 
                     {
 

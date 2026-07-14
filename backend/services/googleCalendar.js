@@ -69,11 +69,18 @@ export async function obtenerHorariosDisponibles(fecha) {
             dayjs(e.start.dateTime).format("HH:mm")
         );
 
-        const horarios = [];
+        const horariosTrabajo = [
+            "09:00",
+            "10:00",
+            "11:00",
+            "12:00",
+            "15:00",
+            "16:00",
+            "17:00",
+            "18:00"
+        ];
 
-        for (let h = 9; h <= 18; h++) {
-
-            const hora = `${h.toString().padStart(2, "0")}:00`;
+        for (const hora of horariosTrabajo) {
 
             if (!ocupados.includes(hora)) {
 
