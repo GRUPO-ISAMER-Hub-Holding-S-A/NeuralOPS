@@ -132,9 +132,7 @@
             const fecha =
                 document.getElementById("fecha").value;
 
-            const res = await fetch(
-                `https://neuralops-u805.onrender.com/api/horarios?fecha=${fecha}`
-            );
+            const res = await fetch(`${API}/horarios?fecha=${fecha}`);
 
             const horarios = await res.json();
 
@@ -181,7 +179,7 @@
 
                 const res = await fetch(
 
-                    "https://neuralops-u805.onrender.com/api/reunion",
+                    `${API}/reunion`,
 
                     {
 
