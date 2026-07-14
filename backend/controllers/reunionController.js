@@ -32,7 +32,10 @@ export const horariosDisponibles = async (req, res) => {
 
 // 📅 CREAR REUNION
 export const crearReunion = async (req, res) => {
-    
+    console.log("==================================");
+console.log("VERSION 06/04 - CREAR REUNION");
+console.log(req.body);
+console.log("==================================");
 
     try {
 
