@@ -104,7 +104,7 @@
             </option>
         </select>
 
-        <button onclick="agendar()">
+        <button id="btnReunion" onclick="agendar()">
             Confirmar reunión
         </button>
 
@@ -112,10 +112,15 @@
 
     <script>
 
-        const API = "https://neuralops-npet.onrender.com/api";
+        const API = "http://localhost:4000/api";
 
         const fechaInput =
             document.getElementById("fecha");
+
+        const hoy = new Date();
+
+        fechaInput.min =
+            hoy.toISOString().split("T")[0];
 
         fechaInput.addEventListener(
             "change",
@@ -128,8 +133,8 @@
                 document.getElementById("fecha").value;
 
             const res = await fetch(
-                `https://neuralops-npet.onrender.com/api/horarios?fecha=${fecha}`
-            );
+`${API}/horarios?fecha=${fecha}`
+);
 
             const horarios = await res.json();
 
@@ -151,60 +156,128 @@
 
         async function agendar() {
 
-            const nombre =
-                document.getElementById("nombre").value;
+            const boton =
+                document.getElementById("btnReunion");
 
-            const email =
-                document.getElementById("email").value;
+            if (boton.disabled) return;
 
-            const fecha =
-                document.getElementById("fecha").value;
+            boton.disabled = true;
 
-            const hora =
-                document.getElementById("horarios").value;
+            boton.innerHTML = "Agendando...";
 
-            const res = await fetch(
-                "https://neuralops-npet.onrender.com/api/reunion",
-                {
-                    method: "POST",
+            try {
 
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+                const nombre =
+                    document.getElementById("nombre").value;
 
-                    body: JSON.stringify({
-                        nombre,
-                        email,
-                        fecha,
-                        hora
-                    })
+                const email =
+                    document.getElementById("email").value;
+
+                const fecha =
+                    document.getElementById("fecha").value;
+
+                const hora =
+                    document.getElementById("horarios").value;
+
+               const res = await fetch(
+
+`${API}/reunion`,
+
+                    {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type": "application/json"
+
+                        },
+
+                        body: JSON.stringify({
+
+                            nombre,
+
+                            email,
+
+                            fecha,
+
+                            hora
+
+                        })
+
+                    }
+
+                );
+
+                const data = await res.json();
+
+                if (!res.ok) {
+
+                    Toastify({
+
+                        text: data.error,
+
+                        duration: 3500,
+
+                        gravity: "top",
+
+                        position: "right",
+
+                        style: {
+
+                            background: "#ff3b30"
+
+                        }
+
+                    }).showToast();
+
+                    return;
+
                 }
-            );
 
-            const data = await res.json();
+                Toastify({
 
-            if (!res.ok) {
-                alert(data.error);
-                return;
+                    text: "📅 Reunión agendada correctamente",
+
+                    duration: 3000,
+
+                    gravity: "top",
+
+                    position: "right",
+
+                    style: {
+
+                        background:
+                            "linear-gradient(135deg,#00d9ff,#0066ff)"
+
+                    }
+
+                }).showToast();
+
+                document.getElementById("nombre").value = "";
+
+                document.getElementById("email").value = "";
+
+                document.getElementById("fecha").value = "";
+
+                document.getElementById("horarios").innerHTML =
+                    "<option>Seleccionar horario</option>";
+
             }
 
-            Toastify({
-                text: "📅 Reunión agendada correctamente",
-                duration: 2500,
-                gravity: "top",
-                position: "right",
-                close: true,
-                stopOnFocus: true,
-                style: {
-                    background: "linear-gradient(135deg,#00d9ff,#0066ff)",
-                    borderRadius: "12px",
-                    boxShadow: "0 15px 40px rgba(0,217,255,.35)",
-                    fontFamily: "Space Grotesk"
-                }
-            }).showToast();
+            catch (err) {
 
-            form.reset();
+                console.log(err);
 
+            }
+
+            finally {
+
+                boton.disabled = false;
+
+                boton.innerHTML = "Confirmar reunión";
+
+            }
 
         }
 

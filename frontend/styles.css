@@ -221,8 +221,6 @@ nav {
 }
 
 
-
-
 .hero::before {
     content: '';
     position: absolute;
@@ -469,81 +467,67 @@ EMPRESAS AMIGAS
 }
 
 .partner-btn {
-    padding: 12px 22px;
-    border: 1px solid #1AE9FF;
-    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: .82rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    padding: .85rem 2rem;
+    border-radius: var(--r-sm);
+    background: var(--cyan);
+    color: #000;
     text-decoration: none;
-    color: #2913f1;
-    background: #1AE9FF;
-    transition: 0.3s ease;
-    font-size: 14px;
-    font-weight: 500;
-    backdrop-filter: blur(10px);
+    border: none;
+    cursor: pointer;
+    transition: all .3s;
+    box-shadow: 0 4px 24px rgba(0, 217, 255, .3);
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
 }
 
 .partner-btn:hover {
     background: #1AE9FF;
-    transform: translateY(-3px);
-    box-shadow: 0 0 20px #1AE9FF;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 40px rgba(0, 217, 255, .4);
 }
 
 
 /*article terminos y privacidad*/
 
 .article {
-
     width: 100%;
-
     max-width: 900px;
-
     margin: 120px auto 80px;
-
     padding: 0 25px;
 
 }
 
 .article-title {
-
     text-align: center;
-
     font-size: 38px;
-
     font-weight: 700;
-
     margin-bottom: 45px;
-
 }
 
 .article h3 {
-
     margin-top: 35px;
-
     margin-bottom: 15px;
-
     color: #00D9FF;
-
 }
 
 .article p {
-
     margin-bottom: 18px;
-
     color: #E5E7EB;
-
     line-height: 1.8;
-
 }
 
 .article ul {
-
     margin: 20px 0 25px 30px;
-
 }
 
 .article li {
-
     margin-bottom: 10px;
-
 }
 
 
@@ -566,7 +550,7 @@ EMPRESAS AMIGAS
 
 .card:hover {
     transform: translateY(-5px);
-    border-color: #1e90ff;
+    border-color: #1ef0ff;
     box-shadow: 0 0 20px rgba(0, 217, 255, 0.08);
 }
 
@@ -593,7 +577,7 @@ EMPRESAS AMIGAS
 
 .metric strong {
     font-size: 28px;
-    color: #1e90ff;
+    color: #1ef0ff;
 }
 
 /* FORM */
@@ -668,6 +652,38 @@ textarea {
     margin-bottom: 20px;
 }
 
+/*reuniones*/
+.spinner{
+    width:18px;
+    height:18px;
+    border:3px solid rgba(255,255,255,.3);
+    border-top:3px solid #fff;
+    border-radius:50%;
+    display:inline-block;
+    animation:spin .8s linear infinite;
+    margin-right:8px;
+    vertical-align:middle;
+}
+
+@keyframes spin{
+
+    from{
+        transform:rotate(0deg);
+    }
+
+    to{
+        transform:rotate(360deg);
+    }
+
+}
+
+button:disabled{
+
+    opacity:.7;
+
+    cursor:not-allowed;
+
+}
 
 /*hamburguesa*/
 

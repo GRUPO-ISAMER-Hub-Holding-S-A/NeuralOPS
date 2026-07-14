@@ -27,14 +27,15 @@ const calendar = google.calendar({
 const CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID;
 
 
+// ==========================
 // HORARIOS DISPONIBLES
+// ==========================
+
 export async function obtenerHorariosDisponibles(fecha) {
 
     try {
 
-        if (!fecha) {
-            return [];
-        }
+        if (!fecha) return [];
 
         const inicioDia =
             dayjs(fecha)
@@ -48,59 +49,70 @@ export async function obtenerHorariosDisponibles(fecha) {
                 .minute(0)
                 .second(0);
 
-        const response =
-            await calendar.events.list({
+        const response = await calendar.events.list({
 
-                calendarId: CALENDAR_ID,
+            calendarId: CALENDAR_ID,
 
-                timeMin: inicioDia.toISOString(),
+            timeMin: inicioDia.toISOString(),
 
-                timeMax: finDia.toISOString(),
+            timeMax: finDia.toISOString(),
 
-                singleEvents: true,
+            singleEvents: true,
 
-                orderBy: "startTime",
-            });
+            orderBy: "startTime"
 
-        const eventos =
-            response.data.items || [];
+        });
 
-        const ocupados =
-            eventos.map(e =>
-                dayjs(
-                    e.start.dateTime
-                ).format("HH:mm")
-            );
+        const eventos = response.data.items || [];
+
+        const ocupados = eventos.map(e =>
+            dayjs(e.start.dateTime).format("HH:mm")
+        );
 
         const horarios = [];
 
-        for (let hora = 9; hora <= 17; hora++) {
+        for (let h = 9; h <= 18; h++) {
 
-            const h =
-                `${hora.toString().padStart(2, "0")}:00`;
+            const hora = `${h.toString().padStart(2, "0")}:00`;
 
-            if (!ocupados.includes(h)) {
-                horarios.push(h);
+            if (!ocupados.includes(hora)) {
+
+                horarios.push(hora);
+
             }
+
         }
 
         return horarios;
 
-    } catch (error) {
+    }
 
-        console.log("❌ ERROR HORARIOS:", error);
+    catch (error) {
+
+        console.log(error);
 
         return [];
+
     }
+
 }
 
 
+
+// ==========================
 // CREAR EVENTO
+// ==========================
+
 export async function crearEventoGoogle({
+
     nombre,
+
     email,
+
     fecha,
+
     hora
+
 }) {
 
     try {
@@ -113,39 +125,57 @@ export async function crearEventoGoogle({
 
         const evento = {
 
-            summary: `Reunión con ${nombre}`,
+            summary:
+                `Reunión con ${nombre}`,
 
             description:
                 `Cliente: ${email}`,
 
             start: {
-                dateTime: inicio.format("YYYY-MM-DDTHH:mm:ss"),
-                timeZone: "America/Argentina/Buenos_Aires"
+
+                dateTime:
+                    inicio.format("YYYY-MM-DDTHH:mm:ss"),
+
+                timeZone:
+                    "America/Argentina/Buenos_Aires"
+
             },
 
             end: {
-                dateTime: fin.format("YYYY-MM-DDTHH:mm:ss"),
-                timeZone: "America/Argentina/Buenos_Aires"
+
+                dateTime:
+                    fin.format("YYYY-MM-DDTHH:mm:ss"),
+
+                timeZone:
+                    "America/Argentina/Buenos_Aires"
+
             }
+
         };
 
-        const response =
+        const creado =
             await calendar.events.insert({
 
                 calendarId: CALENDAR_ID,
 
                 resource: evento
+
             });
 
-        console.log("✅ Evento creado");
+        console.log("✅ Evento creado en Google Calendar");
 
-        return response.data;
+        return creado.data;
 
-    } catch (error) {
+    }
 
-        console.log("❌ ERROR CREAR EVENTO:");
+    catch (error) {
+
+        console.log("❌ ERROR GOOGLE CALENDAR");
+
         console.log(error);
 
         throw error;
+
     }
+
 }

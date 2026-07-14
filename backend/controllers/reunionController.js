@@ -2,6 +2,7 @@ import {
     obtenerHorariosDisponibles,
     crearEventoGoogle
 } from "../services/googleCalendar.js";
+import Reunion from "../models/Reunion.js";
 
 
 // 📅 OBTENER HORARIOS
@@ -27,29 +28,11 @@ export const horariosDisponibles = async (req, res) => {
 };
 
 
-// Dupliucado de horarios
-const existe = await Reunion.findOne({
-
-    fecha,
-
-    hora
-
-});
-
-if (existe) {
-
-    return res.status(409).json({
-
-        error: "Ese horario ya está reservado."
-
-    });
-
-}
-
 
 
 // 📅 CREAR REUNION
 export const crearReunion = async (req, res) => {
+    
 
     try {
 
@@ -60,7 +43,30 @@ export const crearReunion = async (req, res) => {
             hora
         } = req.body;
 
+        // Verificar si ya existe en Mongo
+        const existe = await Reunion.findOne({
+            fecha,
+            hora
+        });
+
+        if (existe) {
+
+            return res.status(409).json({
+                error: "Ese horario ya fue reservado."
+            });
+
+        }
+
+        // Crear evento Google
         await crearEventoGoogle({
+            nombre,
+            email,
+            fecha,
+            hora
+        });
+
+        // Guardar reunión
+        await Reunion.create({
             nombre,
             email,
             fecha,
@@ -71,12 +77,26 @@ export const crearReunion = async (req, res) => {
             message: "Reunión agendada correctamente"
         });
 
-    } catch (error) {
+    }
+    catch (error) {
 
-        console.log("❌ ERROR REUNION:", error);
+        console.log(error);
+
+        if (
+            error.code === 11000 ||
+            error.message === "HORARIO_OCUPADO"
+        ) {
+
+            return res.status(409).json({
+                error: "Ese horario ya fue reservado."
+            });
+
+        }
 
         res.status(500).json({
             error: "Error creando reunión"
         });
+
     }
+
 };
