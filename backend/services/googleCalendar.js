@@ -60,15 +60,7 @@ export async function obtenerHorariosDisponibles(fecha) {
             orderBy: "startTime"
 
         });
-
-        console.log("CALENDAR:", CALENDAR_ID);
-
-console.log(
-    response.data.items.map(e => ({
-        titulo: e.summary,
-        inicio: e.start.dateTime
-    }))
-);
+        
 
         const eventos = response.data.items || [];
 

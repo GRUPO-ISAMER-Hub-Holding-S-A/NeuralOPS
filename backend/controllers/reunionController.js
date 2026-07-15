@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { crearEventoGoogle } from "../services/googleCalendar.js";
+import { crearEventoGoogle, obtenerHorariosDisponibles } from "../services/googleCalendar.js";
 import Reunion from "../models/Reunion.js";
 import { feriados } from "../config/feriados.js";
 
@@ -36,9 +36,14 @@ export const horariosDisponibles = async (req, res) => {
             return res.json([]);
         }
 
+        // Reuniones guardadas en Mongo
         const reuniones = await Reunion.find({ fecha });
 
-        const ocupados = reuniones.map(r => r.hora);
+        const ocupadosMongo = reuniones.map(r => r.hora);
+
+        // Horarios libres según Google Calendar
+        const libresGoogle =
+            await obtenerHorariosDisponibles(fecha);
 
         const horariosTrabajo = [
             "09:00",
@@ -51,9 +56,17 @@ export const horariosDisponibles = async (req, res) => {
             "18:00"
         ];
 
-        const disponibles = horariosTrabajo.filter(
-            h => !ocupados.includes(h)
-        );
+        const disponibles = horariosTrabajo.filter(hora => {
+
+            const ocupadoMongo =
+                ocupadosMongo.includes(hora);
+
+            const ocupadoGoogle =
+                !libresGoogle.includes(hora);
+
+            return !ocupadoMongo && !ocupadoGoogle;
+
+        });
 
         res.json(disponibles);
 
