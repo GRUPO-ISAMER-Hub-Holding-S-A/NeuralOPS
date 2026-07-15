@@ -37,17 +37,15 @@ export async function obtenerHorariosDisponibles(fecha) {
 
         if (!fecha) return [];
 
-        const inicioDia =
-            dayjs(fecha)
-                .hour(9)
-                .minute(0)
-                .second(0);
+        const inicioDia = dayjs(fecha)
+            .hour(9)
+            .minute(0)
+            .second(0);
 
-        const finDia =
-            dayjs(fecha)
-                .hour(18)
-                .minute(0)
-                .second(0);
+        const finDia = dayjs(fecha)
+            .hour(18)
+            .minute(0)
+            .second(0);
 
         const response = await calendar.events.list({
 
@@ -80,21 +78,17 @@ export async function obtenerHorariosDisponibles(fecha) {
             "18:00"
         ];
 
-        for (const hora of horarios) {
+        const disponibles = horarios.filter(
+            hora => !ocupados.includes(hora)
+        );
 
-            if (!ocupados.includes(hora)) {
-
-                horarios.push(hora);
-
-            }
-
-        }
-
-        return horarios;
+        return disponibles;
 
     }
 
     catch (error) {
+
+        console.log("❌ ERROR HORARIOS");
 
         console.log(error);
 
