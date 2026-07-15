@@ -1,9 +1,7 @@
-import {
-    obtenerHorariosDisponibles,
-    crearEventoGoogle
-} from "../services/googleCalendar.js";
+import dayjs from "dayjs";
+import { crearEventoGoogle } from "../services/googleCalendar.js";
 import Reunion from "../models/Reunion.js";
-
+import { feriados } from "../config/feriados.js";
 
 // 📅 OBTENER HORARIOS
 export const horariosDisponibles = async (req, res) => {
@@ -12,21 +10,66 @@ export const horariosDisponibles = async (req, res) => {
 
         const { fecha } = req.query;
 
-        const horarios =
-            await obtenerHorariosDisponibles(fecha);
+        if (!fecha) {
+            return res.json([]);
+        }
 
-        res.json(horarios);
+        const dia = dayjs(fecha);
 
-    } catch (error) {
+        // Pasado
+        if (dia.isBefore(dayjs(), "day")) {
+            return res.json([]);
+        }
 
-        console.log("❌ ERROR HORARIOS:", error);
+        // Domingo
+        if (dia.day() === 0) {
+            return res.json([]);
+        }
+
+        // Sábado
+        if (dia.day() === 6) {
+            return res.json([]);
+        }
+
+        // Feriados
+        if (feriados.includes(fecha)) {
+            return res.json([]);
+        }
+
+        const reuniones = await Reunion.find({ fecha });
+
+        const ocupados = reuniones.map(r => r.hora);
+
+        const horariosTrabajo = [
+            "09:00",
+            "10:00",
+            "11:00",
+            "12:00",
+            "15:00",
+            "16:00",
+            "17:00",
+            "18:00"
+        ];
+
+        const disponibles = horariosTrabajo.filter(
+            h => !ocupados.includes(h)
+        );
+
+        res.json(disponibles);
+
+    }
+
+    catch (error) {
+
+        console.log(error);
 
         res.status(500).json({
             error: "Error obteniendo horarios"
         });
-    }
-};
 
+    }
+
+};
 
 
 
